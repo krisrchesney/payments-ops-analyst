@@ -1,5 +1,6 @@
 # Week 1 (about 20 hours)
 
+
 Goal: by the end of the week, data is landed in Databricks, bronze and silver run, and the product docs exist. Do the product work (project 3) in the same week so the backlog drives the build.
 
 ## Day 1: product first (3 h)
