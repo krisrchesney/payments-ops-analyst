@@ -49,7 +49,7 @@ Why the agent runs locally: Databricks Free Edition limits outbound internet fro
 
 ```
 python -m venv .venv
-.venv\Scripts\python -m pip install faker numpy pandas pyarrow pytest
+.venv\Scripts\python -m pip install -r requirements.txt
 .venv\Scripts\python generator\generate_auths.py --rows 2000000 --days 28 --out out
 .venv\Scripts\python -m pytest -q tests
 ```
