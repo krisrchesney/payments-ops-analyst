@@ -7,6 +7,8 @@
 ## Epic 1: Data foundation
 - **S1** As a data engineer, I can land synthetic authorizations, chargebacks, merchants and issuers in a Databricks volume so the pipeline has a stable source.
   - AC: files in `/Volumes/workspace/payments/landing/`; row counts match the generator output.
+- **S2** As a data engineer, new files in the landing volume are loaded into bronze tables automatically, with where and when each row arrived. *(PAYOPS-24, added after Sprint 1)*
+  - AC: four bronze tables (authorizations, chargebacks, merchants, issuers); row counts match landing (2,000,000 / 7,497 / 800 / 40); each row has `_ingested_at` and `_source_file`.
 - **S2** As an ops analyst, I can trust that the cleaned authorization table (silver layer) has no duplicates or invalid codes.
   - AC: expectations on amount, response code, merchant; dropped-row counts visible in the pipeline UI.
 - **S2** As an ops analyst, I can see daily approval rate by region, channel and tokenization.
