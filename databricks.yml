@@ -1,0 +1,26 @@
+# Declarative Automation Bundle for the payments ops pipeline (PAYOPS-25).
+#
+# Deploys the pipeline in resources/ from this repo to Databricks Free Edition.
+# No host, token or profile in this file: they come from the CLI profile you pass, e.g.
+#   databricks bundle validate --profile DEFAULT
+#   databricks bundle deploy   --profile DEFAULT
+#   databricks bundle run payments_ops_pipeline --profile DEFAULT
+bundle:
+  name: payments-ops-pipeline
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog catalog for every table this pipeline writes.
+    default: workspace
+  schema:
+    description: Schema for the bronze, silver and gold tables. The landing volume lives here too.
+    default: payments
+
+targets:
+  # dev: development mode. The pipeline is named "[dev <you>] payments-ops-pipeline" and runs in development mode.
+  dev:
+    default: true
+    mode: development
