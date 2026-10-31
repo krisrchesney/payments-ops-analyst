@@ -40,10 +40,14 @@ Why the agent runs locally: Databricks Free Edition limits outbound internet fro
 ## Status
 
 - [x] Synthetic data generator with tests
-- [ ] Bronze/silver/gold pipeline on Databricks (`pipelines/`)
-- [ ] Gold export and MCP server (`mcp_server/`)
+- [x] Bronze/silver/gold pipeline on Databricks (`pipelines/`), deployed with a bundle, every layer verified
+- [x] Data quality rules proven with a file of planted bad rows
+- [x] All three incidents found by hand from gold (`docs/incidents-by-hand.md`)
+- [ ] Gold export and MCP server (`mcp_server/`): written, not yet run
 - [ ] Agent evaluation against `incidents.json`
 - [ ] Demo recording
+
+Verified facts and evidence for each item: `docs/project-summary.md`.
 
 ## Run the generator
 
