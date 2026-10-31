@@ -3,6 +3,7 @@
 PAYOPS-10 to 13. All materialized views over silver, recomputed each run:
   gold_daily_approval      approval rate by day, region, channel, tokenized
   gold_decline_reasons     declines by day, region, issuer, response code, with share of the day's declines
+  gold_declines_by_category  declines by day, merchant category, channel, response code
   gold_latency_hourly      p50 / p95 / p99 authorization latency by hour and region
   gold_chargebacks_weekly  chargebacks by week filed, merchant category and reason
 
@@ -33,6 +34,15 @@ def gold_decline_reasons():
     day_region = Window.partitionBy("event_date", "region")
     return declines.withColumn(
         "share_of_declines", F.round(F.col("declines") / F.sum("declines").over(day_region), 6))
+
+
+@dp.materialized_view(comment="Declines by day, merchant category, channel and response code.")
+def gold_declines_by_category():
+    # Added in Sprint 3: finding INC-3 by hand needed merchant category, which no other gold table kept.
+    return (spark.read.table("silver_authorizations")
+            .filter(~F.col("is_approved"))
+            .groupBy("event_date", "mcc", "mcc_description", "channel", "response_code")
+            .agg(F.count("*").alias("declines")))
 
 
 @dp.materialized_view(comment="Authorization latency percentiles by hour and region.")
