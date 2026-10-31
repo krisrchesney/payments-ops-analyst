@@ -1,0 +1,18 @@
+# Lakeflow Spark Declarative Pipeline: landing volume -> bronze -> silver -> gold.
+# Serverless, triggered (runs when you start it, then stops). Table code lives in
+# pipelines/transformations/ and is written by hand (see pipelines/README.md for the spec).
+resources:
+  pipelines:
+    payments_ops_pipeline:
+      name: payments-ops-pipeline
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      continuous: false
+      root_path: ../pipelines
+      libraries:
+        - glob:
+            include: ../pipelines/transformations/**
+      configuration:
+        # Read in code with spark.conf.get("landing_path")
+        landing_path: /Volumes/${var.catalog}/${var.schema}/landing
