@@ -21,13 +21,13 @@ This file lists only what is built and checked. Each line points to its evidence
 | **Gold export:** all 5 gold tables pulled to local Parquet through a SQL warehouse with the Databricks SDK; row counts match Databricks | `mcp_server/export_gold.py`, Jira PAYOPS-44 |
 | **AI agent on MCP:** an MCP server gives Claude 5 read-only tools (in-memory DuckDB with file and network access off and settings locked); 11 automated tests, which caught a time zone bug that was then fixed | `mcp_server/server.py`, `tests/test_mcp_server.py`, Jira PAYOPS-45 |
 | **Agent found all 3 incidents:** asked in plain English, Claude used the tools to find the issuer outage, the UK latency spike and the fraud-rule spike (the last one without being asked about it). Every number it gave matched the gold tables, and it stated what the data could not prove | Jira PAYOPS-46 and PAYOPS-14 |
+| **Agent-drafted daily ops note:** Claude wrote a manager-ready note for an incident day (cause, numbers, caveats, next steps); all 10 figures matched the gold tables, and it flagged on its own that its baseline was skewed by the incident | `docs/sample-daily-note-2026-09-23.md`, Jira PAYOPS-48 |
 | **Product ownership practice:** PRD, 3 epics, user stories with acceptance criteria, short fixed-length sprints in Jira with planning, review and retro; every story closed with an evidence comment | `docs/product/`, Jira project PAYOPS |
 
 ## In progress (do not claim as finished)
 
 | What | Status |
 |---|---|
-| Agent drafts a daily ops note for an incident day | Tool built and tested (PAYOPS-47); drafting not yet done (PAYOPS-48) |
 | Runbook search (RAG): Databricks Vector Search over synthetic runbooks and a fraud-rule change log, so the agent can cite *why* a metric moved | Planned, Jira epic PAYOPS-49 |
 | Evaluation of the agent against the 3 incidents, README, demo recording, release notes, product brief | Sprint 4, not started |
 | Live monitoring (hourly feed, detectors, alerts, dashboard) | Idea only |

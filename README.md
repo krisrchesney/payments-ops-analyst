@@ -45,7 +45,7 @@ Why the agent runs locally: Databricks Free Edition limits outbound internet fro
 - [x] All three incidents found by hand from gold (`docs/incidents-by-hand.md`)
 - [x] Gold export and MCP server (`mcp_server/`), 11 tests passing
 - [x] Agent connected to Claude Code (`.mcp.json`) and found all three incidents, numbers checked against gold
-- [ ] Daily ops note drafted by the agent
+- [x] Daily ops note drafted by the agent, every number checked (`docs/sample-daily-note-2026-09-23.md`)
 - [ ] Runbook search (RAG) with Databricks Vector Search
 - [ ] Formal agent evaluation against `incidents.json`
 - [ ] Demo recording
