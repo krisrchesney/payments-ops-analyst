@@ -17,15 +17,18 @@ This file lists only what is built and checked. Each line points to its evidence
 | **Proved the quality rules:** landed a file of 17 labeled rows; exactly the 10 planted bad rows were dropped (4 / 3 / 3 by rule), 2 duplicate IDs were removed, the 5 good rows kept | `generator/make_bad_rows.py`, Jira PAYOPS-34 |
 | **Gold:** daily approval rate, decline reasons with share, hourly latency percentiles, weekly chargebacks, each checked against a hand-written query or total (e.g. 16/16 day-region groups matched; decline shares sum to 1 in all 224 day-region groups; chargebacks 7,497 = source) | `pipelines/transformations/gold.py`, Jira PAYOPS-10 to 13 |
 | **Incident investigation by hand:** found all 3 planted incidents from the gold tables and confirmed each against the answer key: an issuer outage (code 91 at one bank, ~8× normal), a UK latency spike (p95 ~6× normal for 2 hours), and a fraud rule change (suspected-fraud declines ~4× normal, all online electronics; in-store unaffected) | `docs/incidents-by-hand.md`, Jira PAYOPS-43 |
+| **Fifth gold table** (declines by merchant category), added because the manual investigation showed gold was missing that dimension; 6,625 rows | `pipelines/transformations/gold.py`, commit 7c0d397 |
+| **Gold export:** all 5 gold tables pulled to local Parquet through a SQL warehouse with the Databricks SDK; row counts match Databricks | `mcp_server/export_gold.py`, Jira PAYOPS-44 |
+| **AI agent on MCP:** an MCP server gives Claude 5 read-only tools (in-memory DuckDB with file and network access off and settings locked); 11 automated tests, which caught a time zone bug that was then fixed | `mcp_server/server.py`, `tests/test_mcp_server.py`, Jira PAYOPS-45 |
+| **Agent found all 3 incidents:** asked in plain English, Claude used the tools to find the issuer outage, the UK latency spike and the fraud-rule spike (the last one without being asked about it). Every number it gave matched the gold tables, and it stated what the data could not prove | Jira PAYOPS-46 and PAYOPS-14 |
 | **Product ownership practice:** PRD, 3 epics, user stories with acceptance criteria, short fixed-length sprints in Jira with planning, review and retro; every story closed with an evidence comment | `docs/product/`, Jira project PAYOPS |
 
 ## In progress (do not claim as finished)
 
 | What | Status |
 |---|---|
-| Fifth gold table (declines by merchant category), added because the manual investigation showed gold was missing that dimension | Code written; needs deploy and run |
-| Export of gold tables to local Parquet | `mcp_server/export_gold.py` written; not yet run |
-| MCP server so Claude can answer "why did approvals drop?" with 5 read-only tools (in-memory DuckDB, file and network access off, settings locked) and tests | `mcp_server/server.py`, `tests/test_mcp_server.py`; tests caught a timezone bug, now fixed; not yet connected to Claude |
+| Agent drafts a daily ops note for an incident day | Tool built and tested (PAYOPS-47); drafting not yet done (PAYOPS-48) |
+| Runbook search (RAG): Databricks Vector Search over synthetic runbooks and a fraud-rule change log, so the agent can cite *why* a metric moved | Planned, Jira epic PAYOPS-49 |
 | Evaluation of the agent against the 3 incidents, README, demo recording, release notes, product brief | Sprint 4, not started |
 | Live monitoring (hourly feed, detectors, alerts, dashboard) | Idea only |
 
@@ -35,5 +38,5 @@ This file lists only what is built and checked. Each line points to its evidence
 - **Payments domain vocabulary from the data:** authorizations, ISO 8583-style response codes (05, 51, 54, 14, 59, 91), issuers, merchant category codes, tokenization, chargebacks, approval rate, latency percentiles.
 - **Analysis:** finding incidents hidden by averages, slicing by time, reason code and entity.
 - **Agile and product:** PRD, backlog, acceptance criteria, sprint ceremonies.
-- **Claude / MCP:** building tools for an AI agent with read-only safeguards (in progress).
+- **Claude / MCP:** built and tested an MCP server that gives an AI agent read-only tools with safeguards; checked the agent's answers against the source data.
 
