@@ -1,6 +1,6 @@
 # Incidents found by hand (PAYOPS-43)
 
-Found from the gold tables (and silver for one drill-down) in the Databricks notebook `03_find_incidents`, before looking at `incidents.json`. Checked against the answer key afterwards. This is the answer key for testing the Claude agent in Sprint 3.
+Found from the gold tables (and silver for one drill-down) in the Databricks notebook `03_find_incidents`, before looking at `incidents.json`. Checked against the answer key afterwards.
 
 | Incident | When | Where | What moved | Cause | Answer key |
 |---|---|---|---|---|---|
@@ -12,7 +12,7 @@ Found from the gold tables (and silver for one drill-down) in the Databricks not
 
 - **INC-3 showed first, as a dip:** the lowest region-days were almost all Sep 22 to 24, across every region, which pointed at something not regional. Charting declines by code per day showed code `59` jumping about 4×; silver showed it was Electronics ecommerce.
 - **INC-1 was hidden at day × region level** (one issuer is ~1 in 40 transactions, for a few hours). It showed up by filtering to code `91` (the bank didn't respond) and ranking issuer-days.
-- **INC-2 was hidden in whole-month averages** (Sprint 1) and obvious in the hourly table.
+- **INC-2 was hidden in whole-month averages** and obvious in the hourly table.
 
 **Lesson:** averages over long periods or big groups hide short or narrow incidents; slice by time, by code and by the entity that could fail.
 
