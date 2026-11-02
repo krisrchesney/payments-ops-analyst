@@ -19,10 +19,11 @@ All data and documents are synthetic.
 Run (Claude Desktop / Claude Code start it for you):
   python mcp_server/server.py
 """
-import json
+import math
 import os
 import re
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 
 import duckdb
 from databricks.sdk import WorkspaceClient
@@ -84,8 +85,19 @@ def _db():
 
 def _rows(sql, params=None):
     """Run SQL and return a list of plain dicts (dates as ISO strings)."""
-    df = _db().execute(sql, params or []).fetchdf()
-    return json.loads(df.to_json(orient="records", date_format="iso"))
+    table = _db().sql(sql, params=params or None).to_arrow_table()
+    return [{k: _plain(v) for k, v in row.items()} for row in table.to_pylist()]
+
+
+def _plain(value):
+    """Turn a DuckDB value into something that fits in JSON."""
+    if isinstance(value, (date, datetime)):
+        return value.isoformat()
+    if isinstance(value, Decimal):
+        return float(value)
+    if isinstance(value, float) and math.isnan(value):
+        return None
+    return value
 
 
 def _day(s):
