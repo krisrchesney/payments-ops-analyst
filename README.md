@@ -10,7 +10,7 @@ A Spark pipeline on Databricks that turns synthetic card authorizations into ope
 
 Ask it: *"Approval rates looked off during the week of September 21. Find what moved and explain why."*
 
-Without being told where to look, the agent finds that suspected-fraud declines on online electronics jumped from about 8 a day to about 665 for three days, and it finds the fraud rule change and rollback in the change log that match those dates. It also says what it could not confirm. [Read the full answer and the check of each claim.](docs/sample-why-answer-week-of-2026-09-21.md)
+The question gives no hint of the cause. The agent finds that suspected-fraud declines on online electronics jumped from about 8 a day to about 665 for three days, and it finds the fraud rule change and rollback in the change log that match those dates. It also says what it could not confirm. [Read the full answer and the check of each claim.](docs/sample-why-answer-week-of-2026-09-21.md)
 
 ## Architecture
 
