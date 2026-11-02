@@ -2,7 +2,7 @@
 
 *All data and documents are synthetic. This is the agent's answer, followed by a check of each claim against the Databricks gold tables and the source documents.*
 
-**The question**, asked in a new Claude Code session with the MCP server connected. It names neither electronics nor fraud:
+**The question**, asked in a new Claude Code session with the MCP server connected. The question gives no hint of the cause:
 
 > Approval rates looked off during the week of September 21. Find what moved, explain why it happened, cite any document you relied on, and back it up with numbers from the gold tables. Tell me anything you could not confirm.
 
