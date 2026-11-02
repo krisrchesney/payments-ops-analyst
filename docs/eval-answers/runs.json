@@ -1,0 +1,315 @@
+[
+ {
+  "id": "INC-1-run1",
+  "question": "INC-1",
+  "run": 1,
+  "seconds": 38.4,
+  "turns": 6,
+  "tool_calls": 5,
+  "tools": [
+   "list_metrics",
+   "daily_ops_summary",
+   "top_decline_drivers",
+   "query_gold",
+   "search_runbooks"
+  ],
+  "search_top3": {
+   "issuer-status-notices.md": true
+  },
+  "input_tokens": 29789,
+  "output_tokens": 2023,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-1-run2",
+  "question": "INC-1",
+  "run": 2,
+  "seconds": 37.7,
+  "turns": 6,
+  "tool_calls": 5,
+  "tools": [
+   "list_metrics",
+   "daily_ops_summary",
+   "top_decline_drivers",
+   "query_gold",
+   "search_runbooks"
+  ],
+  "search_top3": {
+   "issuer-status-notices.md": true
+  },
+  "input_tokens": 29605,
+  "output_tokens": 2256,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-1-run3",
+  "question": "INC-1",
+  "run": 3,
+  "seconds": 37.4,
+  "turns": 6,
+  "tool_calls": 5,
+  "tools": [
+   "list_metrics",
+   "daily_ops_summary",
+   "top_decline_drivers",
+   "query_gold",
+   "search_runbooks"
+  ],
+  "search_top3": {
+   "issuer-status-notices.md": true
+  },
+  "input_tokens": 30158,
+  "output_tokens": 2117,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-2-run1",
+  "question": "INC-2",
+  "run": 1,
+  "seconds": 43.9,
+  "turns": 7,
+  "tool_calls": 6,
+  "tools": [
+   "list_metrics",
+   "query_gold",
+   "search_runbooks",
+   "query_gold",
+   "compare_periods",
+   "compare_periods"
+  ],
+  "search_top3": {
+   "platform-change-log.md": true
+  },
+  "input_tokens": 34343,
+  "output_tokens": 2430,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-2-run2",
+  "question": "INC-2",
+  "run": 2,
+  "seconds": 31.3,
+  "turns": 7,
+  "tool_calls": 6,
+  "tools": [
+   "list_metrics",
+   "query_gold",
+   "search_runbooks",
+   "query_gold",
+   "compare_periods",
+   "compare_periods"
+  ],
+  "search_top3": {
+   "platform-change-log.md": true
+  },
+  "input_tokens": 34122,
+  "output_tokens": 2476,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-2-run3",
+  "question": "INC-2",
+  "run": 3,
+  "seconds": 39.2,
+  "turns": 7,
+  "tool_calls": 6,
+  "tools": [
+   "list_metrics",
+   "query_gold",
+   "search_runbooks",
+   "query_gold",
+   "query_gold",
+   "compare_periods"
+  ],
+  "search_top3": {
+   "platform-change-log.md": false
+  },
+  "input_tokens": 33833,
+  "output_tokens": 2280,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-3-run1",
+  "question": "INC-3",
+  "run": 1,
+  "seconds": 44.0,
+  "turns": 10,
+  "tool_calls": 9,
+  "tools": [
+   "list_metrics",
+   "daily_ops_summary",
+   "query_gold",
+   "compare_periods",
+   "top_decline_drivers",
+   "query_gold",
+   "compare_periods",
+   "compare_periods",
+   "search_runbooks"
+  ],
+  "search_top3": {
+   "fraud-rule-change-log.md": true
+  },
+  "input_tokens": 40472,
+  "output_tokens": 3467,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-3-run2",
+  "question": "INC-3",
+  "run": 2,
+  "seconds": 38.3,
+  "turns": 8,
+  "tool_calls": 7,
+  "tools": [
+   "list_metrics",
+   "daily_ops_summary",
+   "query_gold",
+   "query_gold",
+   "search_runbooks",
+   "query_gold",
+   "query_gold"
+  ],
+  "search_top3": {
+   "fraud-rule-change-log.md": true
+  },
+  "input_tokens": 52799,
+  "output_tokens": 2853,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "INC-3-run3",
+  "question": "INC-3",
+  "run": 3,
+  "seconds": 34.8,
+  "turns": 7,
+  "tool_calls": 6,
+  "tools": [
+   "list_metrics",
+   "daily_ops_summary",
+   "query_gold",
+   "query_gold",
+   "search_runbooks",
+   "compare_periods"
+  ],
+  "search_top3": {
+   "fraud-rule-change-log.md": true
+  },
+  "input_tokens": 35079,
+  "output_tokens": 3033,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "OPEN-run1",
+  "question": "OPEN",
+  "run": 1,
+  "seconds": 41.9,
+  "turns": 12,
+  "tool_calls": 11,
+  "tools": [
+   "list_metrics",
+   "query_gold",
+   "query_gold",
+   "top_decline_drivers",
+   "compare_periods",
+   "daily_ops_summary",
+   "search_runbooks",
+   "search_runbooks",
+   "search_runbooks",
+   "query_gold",
+   "query_gold"
+  ],
+  "search_top3": {
+   "issuer-status-notices.md": true,
+   "platform-change-log.md": false,
+   "fraud-rule-change-log.md": true
+  },
+  "input_tokens": 77614,
+  "output_tokens": 4009,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "OPEN-run2",
+  "question": "OPEN",
+  "run": 2,
+  "seconds": 45.6,
+  "turns": 14,
+  "tool_calls": 13,
+  "tools": [
+   "list_metrics",
+   "compare_periods",
+   "query_gold",
+   "query_gold",
+   "query_gold",
+   "top_decline_drivers",
+   "top_decline_drivers",
+   "search_runbooks",
+   "search_runbooks",
+   "search_runbooks",
+   "query_gold",
+   "query_gold",
+   "query_gold"
+  ],
+  "search_top3": {
+   "issuer-status-notices.md": true,
+   "platform-change-log.md": true,
+   "fraud-rule-change-log.md": true
+  },
+  "input_tokens": 79081,
+  "output_tokens": 3443,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ },
+ {
+  "id": "OPEN-run3",
+  "question": "OPEN",
+  "run": 3,
+  "seconds": 40.0,
+  "turns": 13,
+  "tool_calls": 12,
+  "tools": [
+   "list_metrics",
+   "query_gold",
+   "query_gold",
+   "top_decline_drivers",
+   "compare_periods",
+   "compare_periods",
+   "search_runbooks",
+   "search_runbooks",
+   "query_gold",
+   "query_gold",
+   "search_runbooks",
+   "query_gold"
+  ],
+  "search_top3": {
+   "issuer-status-notices.md": false,
+   "platform-change-log.md": true,
+   "fraud-rule-change-log.md": true
+  },
+  "input_tokens": 71130,
+  "output_tokens": 3070,
+  "ended": "success",
+  "is_error": false,
+  "exit_code": 0
+ }
+]
