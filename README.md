@@ -80,6 +80,26 @@ Card payments typically run on the four-party model: the cardholder and their ba
 
 Verified facts and evidence for each item: `docs/project-summary.md`. Databricks notebooks for the early checks and the incident search are in `notebooks/`.
 
+## Results
+
+From the [formal evaluation](docs/eval.md), which graded 12 isolated runs against rules written before any run:
+
+| Test | Result |
+|---|---|
+| All runs | 8 of 12 passed |
+| A question points to the problem | 9 of 9 found the true cause and the right document; 2 of those had a wrong figure, so 7 passed |
+| No hint: review the whole month | 1 of 3 found all three planted incidents |
+| Time per run | 31 to 46 seconds, against a target of under 1 minute |
+
+The same author wrote the data, documents and questions, so these results don't predict performance on real data.
+
+## Next steps
+
+1. Finish the demo recording.
+2. Add automatic detection: an hourly data feed, a table that flags unusual changes, and an alert and dashboard. Today someone has to notice a problem and ask. See the [scope and timeline](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html).
+
+Also see the [release notes](docs/product/releases.md) and the [product brief](docs/product/brief.md).
+
 ## How it was built
 
 Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself. Commits are marked `Co-Authored-By`. The product requirements are in `docs/product/PRD.md`. The Jira board is private, and the [project board](https://krisrchesney.github.io/payments-ops-analyst/board.html) is a read-only copy of it.
