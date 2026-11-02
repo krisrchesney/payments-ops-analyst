@@ -61,4 +61,4 @@ Each figure was rerun as SQL on Databricks. The cited sections were read in the 
 
 **One thing the agent could have shown.** It said it couldn't show the rise was spread across issuers. `gold_decline_reasons` does show this: code 59 rose at all 40 issuers (2.6× to 7.0×, median 4.3×), and the largest issuer accounts for only 3.5% of the rise. It had checked which issuers had code 59, not how much it rose. That doesn't change its conclusion, and it did tell the reader the gap was there.
 
-**Limit of this test.** This is one question, and the documents were written for this project by someone who knew the planted incidents. A larger evaluation is still to come.
+**Limit of this test.** This is one question, and the documents were written for this project by someone who knew the planted incidents. The [full evaluation](eval.md) is 12 runs, and it blocks the agent from reading the rest of this repo.
