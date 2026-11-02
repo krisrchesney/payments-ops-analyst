@@ -41,6 +41,10 @@ code { font: .88em ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
 .card b { display: block; font-size: 1rem; margin-bottom: 4px; }
 .card span { color: var(--muted); }
 .big { display: block; font-size: 1.55rem; line-height: 1.25; color: var(--accent); font-weight: 700; }
+.flow { display: grid; gap: 8px; grid-template-columns: repeat(5, 1fr); margin: 18px 0 10px; }
+.flow .card { padding: 12px; font-size: .88rem; }
+.flow .card.none { border: 1px dashed var(--warn); background: transparent; }
+.flow .card.none span { color: var(--warn); }
 .note { color: var(--muted); font-size: .92rem; }
 .tablewrap { overflow-x: auto; margin: 14px 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94rem; background: var(--surface); }
@@ -51,7 +55,7 @@ th { background: var(--accent-soft); }
 ul { padding-left: 22px; }
 li { margin-bottom: 6px; }
 footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
-@media (max-width: 640px) { .cols, .two { grid-template-columns: 1fr; } }
+@media (max-width: 640px) { .cols, .two, .flow { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -91,6 +95,23 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   </div>
   <p>The numbers say what happened, and the documents suggest why. The assistant is told to treat a matching document as a lead, then check that its dates and scope fit the numbers.</p>
 
+  <h2>Where this fits in a card payment</h2>
+  <p>Card payments typically run on the four-party model. The cardholder uses a card from their bank, the <strong>issuer</strong>. The merchant accepts the card through its bank, the <strong>acquirer</strong>. A card network connects the two banks, and its switch routes each authorization request to the issuer and carries the answer back.</p>
+  <div class="flow">
+    <div class="card"><b>Cardholder</b><span>Pays by card. In the data: card token, wallet flag and channel.</span></div>
+    <div class="card"><b>Merchant</b><span>Starts the request. In the data: merchant, category and region.</span></div>
+    <div class="card none"><b>Acquirer</b><span>The merchant's bank. Not in the data.</span></div>
+    <div class="card none"><b>Network switch</b><span>Routes the request. Not in the data as its own step.</span></div>
+    <div class="card"><b>Issuer</b><span>Approves or declines. In the data: the bank and the response code.</span></div>
+  </div>
+  <p class="note">Solid boxes are in the data and dashed boxes are not. The answer returns along the same route, usually within seconds. The money moves later, through clearing and settlement, which are also not simulated. Latency is recorded as one total for each request.</p>
+  <p><strong>Whose view this is.</strong> The reports and documents are written from the viewpoint of an operations team at a fictional payment processor, a company that handles authorizations on behalf of many banks and merchants. That position is why it can compare patterns across 40 banks at once, and why the three planted problems sit in different places:</p>
+  <ul>
+    <li><strong>Bank outage:</strong> at the issuer. The bank's system stops answering, so requests fail with code 91.</li>
+    <li><strong>UK slowdown:</strong> at the processor. A setting change on its link to the card network makes requests queue, so they're slow but still complete.</li>
+    <li><strong>Strict fraud rule:</strong> at the processor. Its own rule declines payments at every bank, which is why the rise shows up across all 40 banks and not just one.</li>
+  </ul>
+
   <h2>Does it work?</h2>
   <p>The planted problems come with a separate answer key, so results can be checked. I first found all three by hand from the reports, then tested the assistant.</p>
   <div class="tablewrap"><table>
@@ -113,7 +134,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     <li><strong>The test is easier than real life.</strong> I wrote the data, the documents and the test questions, so I knew the answers. Real change logs are messier and less complete.</li>
     <li><strong>The sample is small.</strong> These are a handful of questions, not a full evaluation. A more formal one is the next step.</li>
     <li><strong>Search results can be close.</strong> In one test, the right document won by 0.620 to 0.617, and a good result doesn't always put the most useful section first.</li>
-    <li><strong>Parts of a payment aren't simulated.</strong> The data covers the cardholder, merchant, card-issuing bank and disputes. It leaves out the merchant's bank, the card network and settlement.</li>
+    <li><strong>The payment flow is simplified.</strong> The data covers the cardholder, merchant, issuer and disputes. It leaves out the acquirer, the network as a separate step, and clearing and settlement. The decline codes follow general ISO 8583 style, while each real network and processor has its own list, so the code numbers here won't match any one network exactly.</li>
     <li><strong>There's no live demo.</strong> It runs on my own Databricks and Claude accounts. You can read the sample answers, or run the code and its tests yourself.</li>
   </ul>
 
@@ -129,7 +150,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <div class="tablewrap"><table>
     <tr><th>Area</th><th>What was done</th></tr>
     <tr><td>Data engineering</td><td>Delivered a layered Spark pipeline from raw files to reporting tables, deployed from code, with data quality rules proven on planted bad rows.</td></tr>
-    <tr><td>Payments operations</td><td>Worked with authorizations, response codes, issuers, merchant categories, latency and chargebacks. Traced an issuer outage, a latency spike and a fraud rule problem to their causes.</td></tr>
+    <tr><td>Payments operations</td><td>Worked with authorizations, response codes, issuers, merchant categories, latency and chargebacks, placed within the four-party model. Traced an issuer outage, a latency spike and a fraud rule problem to their causes.</td></tr>
     <tr><td>Product ownership</td><td>Wrote a <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/product/PRD.md">product requirements doc</a> with users, success metrics, risks and a pricing hypothesis. Ran the work as epics, user stories with acceptance criteria and short sprints in Jira, closing each story with a note of the evidence.</td></tr>
     <tr><td>Applied AI</td><td>Gave an AI assistant safe, read-only access to data and documents, added document search (RAG), and tested its answers against known results.</td></tr>
     <tr><td>Quality and judgment</td><td>Checked results against source data, reported the misses as well as the passes, and stated what the evidence can't prove.</td></tr>
@@ -148,7 +169,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <h2>Who built it, and how</h2>
   <p>This is a personal project, not employer or production work. Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself.</p>
 
-  <footer>All card data is simulated, and the documents describe a fictional card processor.</footer>
+  <footer>All card data is simulated, and the documents describe a fictional payment processor.</footer>
 </main>
 </body>
 </html>

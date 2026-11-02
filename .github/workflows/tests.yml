@@ -1,6 +1,9 @@
 name: tests
 
 # Runs without Databricks: the tests use small fake tables and a fake document search.
+permissions:
+  contents: read
+
 on:
   push:
   pull_request:

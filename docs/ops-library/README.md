@@ -1,6 +1,6 @@
 # Ops library (synthetic)
 
-These are made-up operations documents for a fictional card processor. They exist so the agent has something to search (RAG, Jira epic PAYOPS-49). No real company, rule, system or person is described.
+These are made-up operations documents for a fictional payment processor. They exist so the agent has something to search (RAG, Jira epic PAYOPS-49). No real company, rule, system or person is described.
 
 Each `##` heading is one searchable section. The pipeline splits files at those headings into the `docs_chunks` table.
 
