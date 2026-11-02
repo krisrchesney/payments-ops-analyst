@@ -77,7 +77,7 @@ Verified facts and evidence for each item: `docs/project-summary.md`. Databricks
 
 ## How it was built
 
-Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself. Commits are marked `Co-Authored-By`. Product work is in `docs/product/`; the Jira board is private.
+Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself. Commits are marked `Co-Authored-By`. The product requirements are in `docs/product/PRD.md`; the Jira board is private.
 
 ## Run it
 

@@ -124,19 +124,29 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     <li><strong>An AI's answer still needs checking.</strong> The assistant was mostly right and honest about its limits, and it still got one figure slightly wrong.</li>
   </ul>
 
-  <h2>For technical readers</h2>
+  <h2>What this project shows</h2>
+  <p>This is hands-on project experience with simulated data, not production use.</p>
+  <div class="tablewrap"><table>
+    <tr><th>Area</th><th>What was done</th></tr>
+    <tr><td>Data engineering</td><td>Delivered a layered Spark pipeline from raw files to reporting tables, deployed from code, with data quality rules proven on planted bad rows.</td></tr>
+    <tr><td>Payments operations</td><td>Worked with authorizations, response codes, issuers, merchant categories, latency and chargebacks. Traced an issuer outage, a latency spike and a fraud rule problem to their causes.</td></tr>
+    <tr><td>Product ownership</td><td>Wrote a <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/product/PRD.md">product requirements doc</a> with users, success metrics, risks and a pricing hypothesis. Ran the work as epics, user stories with acceptance criteria and short sprints in Jira, closing each story with a note of the evidence.</td></tr>
+    <tr><td>Applied AI</td><td>Gave an AI assistant safe, read-only access to data and documents, added document search (RAG), and tested its answers against known results.</td></tr>
+    <tr><td>Quality and judgment</td><td>Checked results against source data, reported the misses as well as the passes, and stated what the evidence can't prove.</td></tr>
+  </table></div>
+
+  <h2>Technical details</h2>
   <div class="tablewrap"><table>
     <tr><th>Part</th><th>Built with</th></tr>
     <tr><td>Data pipeline</td><td>PySpark and Spark Declarative Pipelines (Lakeflow) on Databricks Free Edition, serverless, deployed with a Databricks bundle into Unity Catalog. Bronze, silver and gold layers, with Auto Loader ingestion and data quality expectations.</td></tr>
     <tr><td>Document search (RAG)</td><td>Markdown split at headings into a table, a Databricks Vector Search Delta Sync index, and <code>databricks-gte-large-en</code> embeddings.</td></tr>
     <tr><td>Assistant</td><td>A Python server using the Model Context Protocol (MCP), used from Claude Code. The report tools run on in-memory DuckDB with file and network access off, and the SQL tool accepts only a single SELECT.</td></tr>
     <tr><td>Testing</td><td>17 pytest tests that run without Databricks, including a fake document search, plus a separate script that checks the live search.</td></tr>
-    <tr><td>Project management</td><td>A <a href="https://github.com/krisrchesney/payments-ops-analyst/tree/master/docs/product">requirements doc and backlog</a>, plus short sprints in a private Jira board. Each story was closed with a note of the evidence.</td></tr>
   </table></div>
   <p>Every result above has its evidence listed in the <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/project-summary.md">project summary</a>.</p>
 
   <h2>Who built it, and how</h2>
-  <p>This is a personal learning project, not employer or production work. Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself.</p>
+  <p>This is a personal project, not employer or production work. Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself.</p>
 
   <footer>All card data is simulated, and the documents describe a fictional card processor.</footer>
 </main>

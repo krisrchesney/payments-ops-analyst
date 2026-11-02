@@ -1,6 +1,6 @@
 # PRD: Payments Ops Analyst
 
-*Started 2026-10-27. A working document for a portfolio project: the users, risks and pricing below are reasoned assumptions, not research with real customers.*
+*A personal project on simulated data. The users, risks and pricing below are reasoned assumptions, not research with real customers.*
 
 ## Problem
 Payment operations analysts see the daily approval rate, decline mix and latency move, but finding why takes manual slicing across region, issuer, merchant category and channel. Small drops get missed, and big ones take hours to explain.
