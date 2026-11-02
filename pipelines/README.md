@@ -1,6 +1,6 @@
-# Pipeline spec (you write the code)
+# Pipeline spec
 
-This is the part to learn by doing. Write it yourself in a Databricks notebook or pipeline file; ask Claude to explain or review, not to write it for you. That keeps the work yours to talk about in interviews.
+The original spec for the bronze, silver and gold tables. The code is in `transformations/`, and `docs.py` adds the document sections used for search.
 
 Use Spark Declarative Pipelines (Lakeflow). Current Python syntax per the Databricks docs (checked 2026-10-27):
 

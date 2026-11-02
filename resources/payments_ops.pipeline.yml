@@ -1,6 +1,6 @@
-# Lakeflow Spark Declarative Pipeline: landing volume -> bronze -> silver -> gold.
+# Lakeflow Spark Declarative Pipeline: landing volume -> bronze -> silver -> gold, plus docs_chunks.
 # Serverless, triggered (runs when you start it, then stops). Table code lives in
-# pipelines/transformations/ and is written by hand (see pipelines/README.md for the spec).
+# pipelines/transformations/ and follows the spec in pipelines/README.md.
 resources:
   pipelines:
     payments_ops_pipeline:

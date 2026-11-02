@@ -11,25 +11,28 @@ This file lists only what is built and checked. Each line points to its evidence
 | Synthetic card-payments data: 2,000,000 authorizations, 7,497 chargebacks, 800 merchants, 40 issuers, over 28 days, with 3 planted incidents | `generator/generate_auths.py`, `tests/test_generator.py` |
 | Data landed in a Unity Catalog volume and checked by row count and schema in a Databricks notebook (PySpark) | Jira PAYOPS-8 |
 | Spark practice: 4 queries (approval rate by region, top decline codes by channel with a window function, p95 latency, a join), and read the query plan (broadcast join, two shuffles, column pruning) | Notebook `01_land_and_verify`; plan page Sprint 1 notes |
-| **Pipeline as code:** Spark Declarative Pipeline (Lakeflow) deployed from git with a Databricks bundle (`databricks.yml`), serverless, triggered | `databricks.yml`, `resources/`, commit 3e01543 |
+| **Pipeline as code:** Spark Declarative Pipeline (Lakeflow) deployed from git with a Databricks bundle (`databricks.yml`), serverless, triggered | `databricks.yml`, `resources/` |
 | **Bronze:** Auto Loader streaming tables (only new files on later runs) plus reference tables, each row tagged with load time and source file; counts matched 2,000,000 / 7,497 / 800 / 40 | `pipelines/transformations/bronze.py`, Jira PAYOPS-24 |
 | **Silver:** deduplicated, enriched, with three named data quality rules that drop bad rows | `pipelines/transformations/silver.py`, Jira PAYOPS-9 |
 | **Proved the quality rules:** landed a file of 17 labeled rows; exactly the 10 planted bad rows were dropped (4 / 3 / 3 by rule), 2 duplicate IDs were removed, the 5 good rows kept | `generator/make_bad_rows.py`, Jira PAYOPS-34 |
 | **Gold:** daily approval rate, decline reasons with share, hourly latency percentiles, weekly chargebacks, each checked against a hand-written query or total (e.g. 16/16 day-region groups matched; decline shares sum to 1 in all 224 day-region groups; chargebacks 7,497 = source) | `pipelines/transformations/gold.py`, Jira PAYOPS-10 to 13 |
 | **Incident investigation by hand:** found all 3 planted incidents from the gold tables and confirmed each against the answer key: an issuer outage (code 91 at one bank, ~8× normal), a UK latency spike (p95 ~6× normal for 2 hours), and a fraud rule change (suspected-fraud declines ~4× normal, all online electronics; in-store unaffected) | `docs/incidents-by-hand.md`, Jira PAYOPS-43 |
-| **Fifth gold table** (declines by merchant category), added because the manual investigation showed gold was missing that dimension; 6,625 rows | `pipelines/transformations/gold.py`, commit 7c0d397 |
+| **Fifth gold table** (declines by merchant category), added because the manual investigation showed gold was missing that dimension; 6,625 rows | `pipelines/transformations/gold.py` |
 | **Gold export:** all 5 gold tables pulled to local Parquet through a SQL warehouse with the Databricks SDK; row counts match Databricks | `mcp_server/export_gold.py`, Jira PAYOPS-44 |
 | **AI agent on MCP:** an MCP server gives Claude 5 read-only tools (in-memory DuckDB with file and network access off and settings locked); 11 automated tests, which caught a time zone bug that was then fixed | `mcp_server/server.py`, `tests/test_mcp_server.py`, Jira PAYOPS-45 |
 | **Agent found all 3 incidents:** asked in plain English, Claude used the tools to find the issuer outage, the UK latency spike and the fraud-rule spike (the last one without being asked about it). Every number it gave matched the gold tables, and it stated what the data could not prove | Jira PAYOPS-46 and PAYOPS-14 |
 | **Agent-drafted daily ops note:** Claude wrote a manager-ready note for an incident day (cause, numbers, caveats, next steps); all 10 figures matched the gold tables, and it flagged on its own that its baseline was skewed by the incident | `docs/sample-daily-note-2026-09-23.md`, Jira PAYOPS-48 |
+| **Runbook library and section table:** 10 synthetic ops documents split into a `docs_chunks` table by the pipeline; 52 rows match the 52 headings, with each file's count matching. The first version passed the row counts but stored the whole document in every row; a content check caught it, and a new data quality rule now guards against it | `docs/ops-library/`, `pipelines/transformations/docs.py`, Jira PAYOPS-59 to 62 |
+| **Vector Search on Free Edition:** a Delta Sync index with managed embeddings (`databricks-gte-large-en`) over a materialized view; all 52 sections indexed | Jira PAYOPS-63 to 65 |
+| **Document search for the agent:** a sixth read-only tool, `search_runbooks`; 17 automated tests in all, with the search faked. On the live index, 6 of 6 questions found the expected document in the top 3 (questions written by someone who knew the answers) | `mcp_server/server.py`, `mcp_server/check_retrieval.py`, Jira PAYOPS-66 and 67 |
+| **Agent explains why a metric moved:** asked a question naming neither electronics nor fraud, Claude found the code 59 spike on online electronics, cited the fraud rule change and its rollback, backed it with gold numbers, and listed what it could not confirm. Figures checked by SQL: all matched except one rounding ("about 80×" where the figures give about 86×). It also said it could not show the rise was spread across issuers when the gold tables could have | `docs/sample-why-answer-week-of-2026-09-21.md`, Jira PAYOPS-68 |
 | **Product ownership practice:** PRD, 3 epics, user stories with acceptance criteria, short fixed-length sprints in Jira with planning, review and retro; every story closed with an evidence comment | `docs/product/`, Jira project PAYOPS |
 
 ## In progress (do not claim as finished)
 
 | What | Status |
 |---|---|
-| Runbook search (RAG): Databricks Vector Search over synthetic runbooks and a fraud-rule change log, so the agent can cite *why* a metric moved | Planned, Jira epic PAYOPS-49 |
-| Evaluation of the agent against the 3 incidents, README, demo recording, release notes, product brief | Sprint 4, not started |
+| Formal evaluation of the agent against the 3 incidents, demo recording, release notes, product brief | Sprint 5, not started |
 | Live monitoring (hourly feed, detectors, alerts, dashboard) | Idea only |
 
 ## Skills this shows (honest level)
@@ -39,4 +42,9 @@ This file lists only what is built and checked. Each line points to its evidence
 - **Analysis:** finding incidents hidden by averages, slicing by time, reason code and entity.
 - **Agile and product:** PRD, backlog, acceptance criteria, sprint ceremonies.
 - **Claude / MCP:** built and tested an MCP server that gives an AI agent read-only tools with safeguards; checked the agent's answers against the source data.
+- **RAG:** split documents into sections, indexed them with Databricks Vector Search and managed embeddings, gave an agent a search tool, and tested retrieval against known answers.
+
+## How it was built
+
+Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself.
 
