@@ -2,7 +2,7 @@
 
 A Spark pipeline on Databricks that turns synthetic card authorizations into operational reports, plus a Claude agent that explains why the numbers moved. The agent gets the numbers from the reports and the reason from a searchable library of runbooks and change logs (RAG), and it cites both.
 
-**Personal portfolio project. All data and documents in this repo are synthetic.** The data comes from `generator/generate_auths.py`, and the documents describe a fictional card processor. No real card, merchant, issuer or cardholder data is used, and this is not employer or production work.
+**Personal portfolio project. All data and documents in this repo are synthetic.** The data comes from `generator/generate_auths.py`, and the documents describe a fictional payment processor. No real card, merchant, issuer or cardholder data is used, and this is not employer or production work.
 
 **Project page:** https://krisrchesney.github.io/payments-ops-analyst/
 
@@ -36,7 +36,7 @@ Why the agent runs locally: Databricks Free Edition limits outbound internet fro
 
 ## How this maps to a card payment
 
-In a card payment, the merchant's bank (the acquirer) sends an authorization request through a card network's switch to the cardholder's bank (the issuer). An approve or decline comes back the same way in near real time. Clearing and settlement move the money later.
+Card payments typically run on the four-party model: the cardholder and their bank (the issuer), and the merchant and its bank (the acquirer). A card network connects the two banks, and its switch routes each authorization request to the issuer and carries the answer back. Clearing and settlement move the money later.
 
 | Step | In this project |
 |---|---|
@@ -44,9 +44,13 @@ In a card payment, the merchant's bank (the acquirer) sends an authorization req
 | Merchant | `merchant_id`, `mcc`, region |
 | Acquirer | Not modeled |
 | Network and switch | Not modeled as a step; `latency_ms` is one total for the authorization |
-| Issuer | `issuer_id`, and its decision in `response_code` |
+| Issuer | `issuer_id`, and the result in `response_code`. Most declines are the issuer's decision; `91` means no answer came back, and the planted `59` spike comes from the processor's rule |
 | Clearing and settlement | Not modeled |
-| Disputes | Chargebacks linked to an approved `auth_id` |
+| Disputes | Chargebacks linked to an approved `auth_id`. A real chargeback attaches to the cleared transaction, but clearing isn't modeled here |
+
+**Viewpoint:** the reports and documents are written for an operations team at a fictional payment processor that handles authorizations on behalf of many banks and merchants. That's why it can compare 40 issuers at once and run fraud rules of its own.
+
+**Response codes** follow general ISO 8583 style. Each real network and processor publishes its own list, so these won't match any one network exactly. For example, `91` is usually defined as the issuer or switch being inoperative, and it's called "issuer unavailable" here.
 
 ## Data
 

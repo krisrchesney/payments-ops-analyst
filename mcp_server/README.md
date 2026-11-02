@@ -17,7 +17,7 @@ A local Python MCP server that gives Claude Desktop or Claude Code read-only too
 
 1. Sign in with the Databricks CLI.
 2. Run `.venv\Scripts\python mcp_server\export_gold.py` to copy the gold tables to `exports/`.
-3. Open Claude Code in the repo root. `.mcp.json` registers the server.
+3. Open Claude Code in the repo root. `.mcp.json` registers the server, using the Windows path to the virtual environment. On macOS or Linux, change it to `.venv/bin/python`.
 
 ## Check it
 

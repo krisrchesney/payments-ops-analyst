@@ -38,7 +38,7 @@ This file lists only what is built and checked. Each line points to its evidence
 ## Skills used
 
 - **Hands-on project experience** (not years of production use): Databricks, PySpark, Spark Declarative Pipelines / Lakeflow, Auto Loader, Delta tables, Unity Catalog, Databricks bundles and CLI, data quality expectations, medallion architecture.
-- **Payments domain vocabulary from the data:** authorizations, ISO 8583-style response codes (05, 51, 54, 14, 59, 91), issuers, merchant category codes, tokenization, chargebacks, approval rate, latency percentiles.
+- **Payments domain, learned through the project:** the four-party model, authorizations, ISO 8583-style response codes (05, 51, 54, 14, 59, 91), issuers, merchant category codes, tokenization, chargebacks, approval rate, latency percentiles.
 - **Analysis:** finding incidents hidden by averages, slicing by time, reason code and entity.
 - **Agile and product:** PRD, success metrics, epics and user stories, acceptance criteria, sprint ceremonies.
 - **Claude / MCP:** built and tested an MCP server that gives an AI agent read-only tools with safeguards; checked the agent's answers against the source data.
