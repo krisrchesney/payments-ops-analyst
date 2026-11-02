@@ -32,6 +32,9 @@ code { font: .88em ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
 .lede { font-size: 1.2rem; color: var(--muted); }
 .label { display: inline-block; margin-bottom: 14px; padding: 4px 12px; border-radius: 999px;
   background: var(--warn-soft); color: var(--warn); font-size: .88rem; font-weight: 600; }
+.tabs { display: flex; gap: 6px; margin: 0 0 28px; border-bottom: 1px solid var(--line); }
+.tabs a { padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.tabs a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
 .links { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 0; }
 .btn { padding: 8px 14px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface);
   color: var(--text); text-decoration: none; font-weight: 600; font-size: .95rem; }
@@ -46,6 +49,7 @@ code { font: .88em ui-monospace, Consolas, monospace; overflow-wrap: anywhere; }
 .flow .card.none { border: 1px dashed var(--warn); background: transparent; }
 .flow .card.none span { color: var(--warn); }
 .note { color: var(--muted); font-size: .92rem; }
+.status { margin: 16px 0 0; }
 .tablewrap { overflow-x: auto; margin: 14px 0; }
 table { border-collapse: collapse; width: 100%; font-size: .94rem; background: var(--surface); }
 th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
@@ -60,6 +64,11 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
 </head>
 <body>
 <main>
+  <nav class="tabs" aria-label="Project pages">
+    <a href="./" aria-current="page">Overview</a>
+    <a href="roadmap.html">Scope and timeline</a>
+    <a href="board.html">Project board</a>
+  </nav>
   <span class="label">Personal project. All data is simulated.</span>
   <h1>Payments Ops Analyst</h1>
   <p class="lede">An AI assistant that explains why card approval rates changed, and shows the numbers and documents behind its answer.</p>
@@ -67,11 +76,20 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     <a class="btn" href="https://github.com/krisrchesney/payments-ops-analyst">Code on GitHub</a>
     <a class="btn" href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/sample-why-answer-week-of-2026-09-21.md">Read a full sample answer</a>
   </div>
+  <p class="note status"><strong>Where the project stands:</strong> 14 of 22 work items are done, and Sprint 5 runs through November 9, 2026. <a href="board.html">See the project board</a> or <a href="roadmap.html">read the scope and timeline.</a></p>
 
   <h2>The problem</h2>
   <p>Every time someone pays by card, the payment is approved or declined. Payment companies watch the share that gets approved, called the approval rate, because each wrongly declined payment is a lost sale and an unhappy customer.</p>
   <p>When that rate drops, someone has to find out why. It might be a bank that has gone down, a slow network or a new fraud rule. Answering usually means two separate jobs: digging through reports to see what changed, then searching change logs and notes to find what caused it.</p>
   <p>This project does both jobs. You ask a question in plain English, and an assistant built on Claude answers from the reports and the documents, then says where each fact came from.</p>
+
+  <h2>How it works</h2>
+  <div class="cols">
+    <div class="card"><b>1. Build the reports</b><span>A data pipeline cleans 2 million simulated card payments and summarizes them into reports: approval rates, decline reasons, response times and disputes.</span></div>
+    <div class="card"><b>2. Make the documents searchable</b><span>Ten made-up operations documents, such as change logs and how-to guides, are split into 52 sections and indexed by meaning. A search for "declined electronics orders" can find a rule change that uses different words.</span></div>
+    <div class="card"><b>3. Let Claude use both</b><span>Claude gets six read-only tools: five that query the reports and one that searches the documents. It can look things up, but it can't change anything.</span></div>
+  </div>
+  <p>The numbers say what happened, and the documents suggest why. The assistant is told to treat a matching document as a lead, then check that its dates and scope fit the numbers.</p>
 
   <h2>An example</h2>
   <p>The payment data here is simulated, and it contains a few problems I planted on purpose. One of them was a fraud rule that went too far. This is what happened when I asked about that week without mentioning fraud or any type of merchant.</p>
@@ -86,14 +104,6 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   </div>
   <p>It also listed what it couldn't confirm. For example, the data doesn't show whether the declined customers were genuine, so it wouldn't claim they were.</p>
   <p><strong>I then checked the answer against the source data.</strong> The figures matched, with one exception: it said declines reached "about 80 times" normal, and the actual figure is about 86. It also said it couldn't show the rise was spread across banks, when the data could have shown that. Neither mistake changed its conclusion. <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/sample-why-answer-week-of-2026-09-21.md">Read the full answer and the check.</a></p>
-
-  <h2>How it works</h2>
-  <div class="cols">
-    <div class="card"><b>1. Build the reports</b><span>A data pipeline cleans 2 million simulated card payments and summarizes them into reports: approval rates, decline reasons, response times and disputes.</span></div>
-    <div class="card"><b>2. Make the documents searchable</b><span>Ten made-up operations documents, such as change logs and how-to guides, are split into 52 sections and indexed by meaning. A search for "declined electronics orders" can find a rule change that uses different words.</span></div>
-    <div class="card"><b>3. Let Claude use both</b><span>Claude gets six read-only tools: five that query the reports and one that searches the documents. It can look things up, but it can't change anything.</span></div>
-  </div>
-  <p>The numbers say what happened, and the documents suggest why. The assistant is told to treat a matching document as a lead, then check that its dates and scope fit the numbers.</p>
 
   <h2>Where this fits in a card payment</h2>
   <p>Card payments typically run on the four-party model. The cardholder uses a card from their bank, the <strong>issuer</strong>. The merchant accepts the card through its bank, the <strong>acquirer</strong>. A card network connects the two banks, and its switch routes each authorization request to the issuer and carries the answer back.</p>
@@ -122,8 +132,9 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   </table></div>
   <div class="tablewrap"><table>
     <tr><th>Test</th><th>Result</th></tr>
-    <tr><td>Can the assistant find the problems from the reports?</td><td>Yes, all 3, and the figures it gave matched the data.</td></tr>
-    <tr><td>Can it connect a problem to its cause in the documents?</td><td>Yes, for the fraud rule, in the example above. The other two haven't had the same full test yet.</td></tr>
+    <tr><td>Formal evaluation: 12 fresh runs, graded against rules written first</td><td><strong>8 of 12 passed.</strong> <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/eval.md">Read the rules, answers and failures.</a></td></tr>
+    <tr><td>Asked about a problem, does it find the true cause?</td><td>Yes, in all 9 runs across the 3 problems, each citing the right document. Two of those answers still failed because they contained one wrong figure.</td></tr>
+    <tr><td>Asked to review the whole month with no hint, does it find all 3 problems?</td><td>Only in 1 of 3 runs. It always found the fraud rule. It missed the UK slowdown once and the bank outage once, the two problems that barely moved approvals.</td></tr>
     <tr><td>Does the search find the right document?</td><td>For 6 of 6 test questions, the expected document was in the top 3 results. For each planted problem, the right document ranked first or second.</td></tr>
     <tr><td>Can it write a daily report?</td><td>Yes. All 10 figures in its <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/sample-daily-note-2026-09-23.md">sample note</a> matched, and it noticed on its own that the problem had skewed its comparison.</td></tr>
     <tr><td>Do the data quality checks work?</td><td>In a test file of 17 rows, all 10 planted bad rows were removed, along with 2 duplicates, and the 5 good rows were kept.</td></tr>
@@ -132,7 +143,8 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <h2>What this doesn't prove</h2>
   <ul>
     <li><strong>The test is easier than real life.</strong> I wrote the data, the documents and the test questions, so I knew the answers. Real change logs are messier and less complete.</li>
-    <li><strong>The sample is small.</strong> These are a handful of questions, not a full evaluation. A more formal one is the next step.</li>
+    <li><strong>The sample is small.</strong> The evaluation is 12 runs across 4 questions. That shows the assistant's answers vary from run to run, but it isn't a large test.</li>
+    <li><strong>Nothing watches the data yet.</strong> The assistant answers when someone asks. There's no dashboard or automatic alert, so a person still has to notice a problem first. <a href="roadmap.html">That's the next planned work.</a></li>
     <li><strong>Search results can be close.</strong> In one test, the right document won by 0.620 to 0.617, and a good result doesn't always put the most useful section first.</li>
     <li><strong>The payment flow is simplified.</strong> The data covers the cardholder, merchant, issuer and disputes. It leaves out the acquirer, the network as a separate step, and clearing and settlement. The decline codes follow general ISO 8583 style, while each real network and processor has its own list, so the code numbers here won't match any one network exactly.</li>
     <li><strong>There's no live demo.</strong> It runs on my own Databricks and Claude accounts. You can read the sample answers, or run the code and its tests yourself.</li>
@@ -142,7 +154,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <ul>
     <li><strong>Averages hide problems.</strong> The bank outage didn't show in daily totals by region. It only appeared after filtering to one decline reason and ranking by bank and day.</li>
     <li><strong>Correct counts can hide wrong content.</strong> The first document table had exactly the right 52 rows, yet every row held a whole document instead of one section. Reading the actual text caught it, and the pipeline now fails if that happens again.</li>
-    <li><strong>An AI's answer still needs checking.</strong> The assistant was mostly right and honest about its limits, and it still got one figure slightly wrong.</li>
+    <li><strong>An AI's answer still needs checking.</strong> The assistant always found the right cause when pointed at a problem, yet 2 of those 9 answers misstated a figure, once while its own query showed the right number.</li>
   </ul>
 
   <h2>What this project shows</h2>
@@ -162,12 +174,21 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     <tr><td>Data pipeline</td><td>PySpark and Spark Declarative Pipelines (Lakeflow) on Databricks Free Edition, serverless, deployed with a Databricks bundle into Unity Catalog. Bronze, silver and gold layers, with Auto Loader ingestion and data quality expectations.</td></tr>
     <tr><td>Document search (RAG)</td><td>Markdown split at headings into a table, a Databricks Vector Search Delta Sync index, and <code>databricks-gte-large-en</code> embeddings.</td></tr>
     <tr><td>Assistant</td><td>A Python server using the Model Context Protocol (MCP), used from Claude Code. The report tools run on in-memory DuckDB with file and network access off, and the SQL tool accepts only a single SELECT.</td></tr>
-    <tr><td>Testing</td><td>17 pytest tests that run without Databricks, including a fake document search, plus a separate script that checks the live search.</td></tr>
+    <tr><td>Testing</td><td>17 pytest tests that run without Databricks, including a fake document search, plus a separate script that checks the live search. A runner starts each evaluation session in an empty folder with only the assistant's tools, so it can't read the answers in this repo.</td></tr>
   </table></div>
   <p>Every result above has its evidence listed in the <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/project-summary.md">project summary</a>.</p>
 
   <h2>Who built it, and how</h2>
   <p>This is a personal project, not employer or production work. Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself.</p>
+
+  <h2>Follow the work</h2>
+  <div class="tablewrap"><table>
+    <tr><th>To see</th><th>Go to</th></tr>
+    <tr><td>What's finished and what's next, and why each piece matters</td><td><a href="roadmap.html">Scope and timeline</a></td></tr>
+    <tr><td>Every sprint and work item, with its current status</td><td><a href="board.html">Project board</a></td></tr>
+    <tr><td>How the assistant scored, including its failures</td><td><a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/eval.md">Evaluation results</a></td></tr>
+    <tr><td>Each change as it's made</td><td><a href="https://github.com/krisrchesney/payments-ops-analyst/commits/master">Code history on GitHub</a></td></tr>
+  </table></div>
 
   <footer>All card data is simulated, and the documents describe a fictional payment processor.</footer>
 </main>
