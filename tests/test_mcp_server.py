@@ -78,3 +78,36 @@ def test_daily_ops_summary(server):
     r = server.daily_ops_summary("2026-09-03")
     assert r["approval"]["approval_rate"] == 0.8
     assert len(r["latency_spikes"]) == 1
+
+
+# search_runbooks tests use a fake search, so they need neither Databricks nor a network.
+FAKE_ROW = ["fraud-rule-change-log.md#05", "fraud-rule-change-log.md", "FR-2041: Electronics", "Fraud rule change log\nFR-2041", 0.66313]
+
+
+def test_search_runbooks_returns_sections_to_cite(server, monkeypatch):
+    monkeypatch.setattr(server, "_query_index", lambda question, k: [FAKE_ROW])
+    r = server.search_runbooks("why were electronics declined?")
+    assert r["results"] == [{"chunk_id": "fraud-rule-change-log.md#05", "source_file": "fraud-rule-change-log.md",
+                             "heading": "FR-2041: Electronics", "text": "Fraud rule change log\nFR-2041", "score": 0.663}]
+    assert r["source"]["question"] == "why were electronics declined?"
+
+
+@pytest.mark.parametrize("asked, sent", [(3, 3), (0, 1), (500, 10)])
+def test_search_runbooks_keeps_k_in_range(server, monkeypatch, asked, sent):
+    seen = []
+    monkeypatch.setattr(server, "_query_index", lambda question, k: seen.append(k) or [])
+    assert server.search_runbooks("anything", k=asked)["results"] == []
+    assert seen == [sent]
+
+
+def test_search_runbooks_rejects_a_blank_question(server, monkeypatch):
+    monkeypatch.setattr(server, "_query_index", lambda question, k: pytest.fail("should not search"))
+    assert "error" in server.search_runbooks("   ")
+
+
+def test_search_failure_is_reported_and_gold_tools_still_work(server, monkeypatch):
+    def down(question, k):
+        raise ConnectionError("cannot reach Databricks\nlong detail")
+    monkeypatch.setattr(server, "_query_index", down)
+    assert server.search_runbooks("anything") == {"error": "Document search is unavailable: cannot reach Databricks"}
+    assert server.query_gold("SELECT COUNT(*) AS n FROM gold_daily_approval")["rows"] == [{"n": 3}]
