@@ -4,7 +4,7 @@ A Spark pipeline on Databricks that turns synthetic card authorizations into ope
 
 **Personal portfolio project. All data and documents in this repo are synthetic.** The data comes from `generator/generate_auths.py`, and the documents describe a fictional payment processor. No real card, merchant, issuer or cardholder data is used, and this is not employer or production work.
 
-**Project page:** https://krisrchesney.github.io/payments-ops-analyst/
+**Follow the work:** [Project page](https://krisrchesney.github.io/payments-ops-analyst/) | [Scope and timeline](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html) | [Project board](https://krisrchesney.github.io/payments-ops-analyst/board.html) | [Evaluation results](docs/eval.md)
 
 ## What it does
 
@@ -74,14 +74,15 @@ Card payments typically run on the four-party model: the cardholder and their ba
 - [x] Daily ops note drafted by the agent, every number checked (`docs/sample-daily-note-2026-09-23.md`)
 - [x] Runbook search (RAG) with Databricks Vector Search: 6 of 6 test questions found the expected document in the top 3
 - [x] Agent explains a metric move by citing a document and gold numbers (`docs/sample-why-answer-week-of-2026-09-21.md`)
-- [ ] Formal agent evaluation against `incidents.json`
+- [x] Formal agent evaluation: [8 of 12 runs passed](docs/eval.md). All 9 runs with a hint found the right cause, 2 of them had a wrong figure, and 1 of 3 no-hint runs found all three incidents
 - [ ] Demo recording
+- [ ] Automatic detection and a dashboard: planned. Today someone has to ask, because nothing watches the data on its own
 
 Verified facts and evidence for each item: `docs/project-summary.md`. Databricks notebooks for the early checks and the incident search are in `notebooks/`.
 
 ## How it was built
 
-Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself. Commits are marked `Co-Authored-By`. The product requirements are in `docs/product/PRD.md`; the Jira board is private.
+Claude Code wrote the Python under my direction. I set the requirements and product decisions, reviewed what it wrote, ran the deployments and tests, and typed the Databricks notebook queries myself. Commits are marked `Co-Authored-By`. The product requirements are in `docs/product/PRD.md`. The Jira board is private, and the [project board](https://krisrchesney.github.io/payments-ops-analyst/board.html) is a read-only copy of it.
 
 ## Run it
 

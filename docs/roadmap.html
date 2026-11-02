@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scope and Timeline</title>
+<meta name="description" content="What the Payments Ops Analyst project covers, what's finished, what's in progress and what's planned, with why each piece matters.">
+<style>
+:root {
+  --bg: #f7f6f2; --surface: #ffffff; --text: #1d1d1b; --muted: #5f5e58; --line: #e2e0d8;
+  --accent: #2f5d8a; --accent-soft: #e6eef6; --warn: #8f5514; --warn-soft: #f6ecdc;
+  --done: #2c6e49; --done-soft: #e3f1e8;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --surface: #1f1f1d; --text: #ecebe6; --muted: #a6a59e; --line: #34332f;
+    --accent: #8fb6dc; --accent-soft: #23303d; --warn: #e0a560; --warn-soft: #33291b;
+    --done: #7fc79d; --done-soft: #1d2f25;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --surface: #1f1f1d; --text: #ecebe6; --muted: #a6a59e; --line: #34332f;
+  --accent: #8fb6dc; --accent-soft: #23303d; --warn: #e0a560; --warn-soft: #33291b;
+  --done: #7fc79d; --done-soft: #1d2f25;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 800px; margin: 0 auto; padding: 48px 16px 80px; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; margin: 52px 0 6px; }
+h3 { font-size: 1.05rem; margin: 0; }
+p { margin: 0 0 14px; }
+a { color: var(--accent); }
+.lede { font-size: 1.2rem; color: var(--muted); }
+.note { color: var(--muted); font-size: .94rem; }
+.tabs { display: flex; gap: 6px; margin: 0 0 28px; border-bottom: 1px solid var(--line); }
+.tabs a { padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.tabs a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
+.bar { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); margin: 24px 0 0; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.stat b { display: block; font-size: 1.55rem; line-height: 1.25; }
+.stat strong { display: block; font-size: 1rem; }
+.stat span { color: var(--muted); font-size: .9rem; }
+.stat.done b { color: var(--done); }
+.stat.now b { color: var(--accent); }
+.stat.next b { color: var(--warn); }
+.two { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin: 14px 0; }
+.box { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; font-size: .95rem; }
+.box b { display: block; margin-bottom: 4px; }
+.box ul { margin: 0; padding-left: 20px; }
+.box li { margin-bottom: 4px; }
+.timeline { list-style: none; margin: 18px 0 0; padding: 0 0 0 20px; border-left: 2px solid var(--line); }
+.timeline > li { position: relative; margin: 0 0 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.timeline > li::before { content: ""; position: absolute; left: -27px; top: 20px; width: 12px; height: 12px; border-radius: 50%; background: var(--dot); border: 2px solid var(--bg); }
+.timeline.done { --dot: var(--done); }
+.timeline.now { --dot: var(--accent); }
+.timeline.next { --dot: var(--warn); }
+.when { display: block; color: var(--muted); font-size: .85rem; font-weight: 600; margin-bottom: 2px; }
+.what { margin: 6px 0 10px; font-size: .96rem; }
+dl { display: grid; gap: 6px 12px; grid-template-columns: 90px 1fr; margin: 0; font-size: .94rem; }
+dt { color: var(--muted); font-weight: 600; }
+dd { margin: 0; }
+footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+@media (max-width: 640px) {
+  .bar, .two { grid-template-columns: 1fr; }
+  dl { grid-template-columns: 1fr; gap: 0; }
+  dd { margin-bottom: 8px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <nav class="tabs" aria-label="Project pages">
+    <a href="./">Overview</a>
+    <a href="roadmap.html" aria-current="page">Scope and timeline</a>
+    <a href="board.html">Project board</a>
+  </nav>
+
+  <h1>Scope and timeline</h1>
+  <p class="lede">What this project covers, what has been built and what comes next, with the reason for each piece of work. For every work item and its status, see the <a href="board.html">project board</a>.</p>
+  <div class="bar">
+    <div class="stat done"><b>9</b><strong>milestones finished</strong><span>October 27 to November 2, 2026</span></div>
+    <div class="stat now"><b>3</b><strong>still to do this sprint</strong><span>Due by November 9, 2026</span></div>
+    <div class="stat next"><b>3</b><strong>planned after that</strong><span>No dates set</span></div>
+  </div>
+
+  <h2>Scope</h2>
+  <p>The goal is to help a payment operations team answer one question faster: <em>what changed, where, and why?</em></p>
+  <div class="two">
+    <div class="box">
+      <b>In scope</b>
+      <ul>
+        <li>Daily reports on approvals, declines, response times and disputes</li>
+        <li>An AI assistant that explains changes from those reports and from searchable documents</li>
+        <li>A drafted daily note for the operations manager</li>
+        <li>Testing the assistant against known answers</li>
+      </ul>
+    </div>
+    <div class="box">
+      <b>Out of scope</b>
+      <ul>
+        <li>Real card data: everything here is simulated</li>
+        <li>Fraud scoring, or changing whether a payment is approved</li>
+        <li>The acquirer, the network as a separate step, and clearing and settlement</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>Finished</h2>
+  <p class="note">Oldest first.</p>
+  <ol class="timeline done">
+    <li>
+      <span class="when">October 27</span>
+      <h3>Product plan</h3>
+      <p class="what">A <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/product/PRD.md">requirements document</a> with users, success metrics and risks, then epics and user stories with acceptance criteria.</p>
+      <dl>
+        <dt>Why</dt><dd>To settle who this is for and how success would be judged before building anything.</dd>
+        <dt>Value</dt><dd>Later results could be measured against targets written in advance.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">October 27</span>
+      <h3>Simulated data with planted problems</h3>
+      <p class="what">2 million card authorizations and 7,497 chargebacks across 800 merchants and 40 banks, with three planted problems and a separate answer key.</p>
+      <dl>
+        <dt>Why</dt><dd>Real card data can't be used, and testing needs problems whose true cause is known.</dd>
+        <dt>Value</dt><dd>Every later result can be checked against an answer instead of judged by feel.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">October 31</span>
+      <h3>Reporting pipeline</h3>
+      <p class="what">A Spark pipeline on Databricks that turns raw files into daily reports, deployed from code, with data quality rules.</p>
+      <dl>
+        <dt>Why</dt><dd>Analysts can only explain a change if they trust the numbers underneath it.</dd>
+        <dt>Value</dt><dd>The quality rules were proven: a test file's 10 planted bad rows and 2 duplicates were removed, and its 5 good rows were kept.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">October 31</span>
+      <h3>Finding the problems by hand</h3>
+      <p class="what"><a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/incidents-by-hand.md">All three planted problems found</a> from the reports, then confirmed against the answer key.</p>
+      <dl>
+        <dt>Why</dt><dd>To learn what an analyst actually has to do before asking an AI to do it.</dd>
+        <dt>Value</dt><dd>It exposed a gap in the reports, which led to a new one by merchant category. It also showed that averages hide short or narrow problems.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">October 31 to November 1</span>
+      <h3>AI assistant with read-only tools</h3>
+      <p class="what">Claude connected to the reports through a Model Context Protocol server, with tools that can look things up but can't change anything.</p>
+      <dl>
+        <dt>Why</dt><dd>Slicing reports by region, bank, category and channel is the slow part of an investigation.</dd>
+        <dt>Value</dt><dd>Anyone can ask in plain English and get an answer that names the numbers it used, with no risk to the data.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">November 1</span>
+      <h3>Drafted daily note</h3>
+      <p class="what">The assistant <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/sample-daily-note-2026-09-23.md">writes a short note</a> for the operations manager, covering the cause, numbers, caveats and next steps.</p>
+      <dl>
+        <dt>Why</dt><dd>Managers need a short summary each day, and it's built from the same analysis.</dd>
+        <dt>Value</dt><dd>It gives the manager a draft to edit. All 10 figures in the sample matched the data.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">November 1 to 2</span>
+      <h3>Document search</h3>
+      <p class="what">Ten simulated change logs, notices and how-to guides, split into 52 sections and searchable by meaning (RAG).</p>
+      <dl>
+        <dt>Why</dt><dd>Reports show what changed, but the reason is usually written down somewhere else.</dd>
+        <dt>Value</dt><dd>Answers can cite the document behind a cause. In a live check, the expected document was in the top 3 results for 6 of 6 questions.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">November 1 to 2</span>
+      <h3>Public release</h3>
+      <p class="what">The code, tests, sample answers and <a href="./">this site</a> published under an open license, with the tests running automatically on GitHub.</p>
+      <dl>
+        <dt>Why</dt><dd>So anyone reviewing this project can see the actual work.</dd>
+        <dt>Value</dt><dd>Anyone can read the code and run the tests without an account.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">November 2</span>
+      <h3>Formal evaluation</h3>
+      <p class="what">12 fresh runs graded against rules written first, with every figure rechecked. <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/eval.md"><strong>8 of 12 passed.</strong></a></p>
+      <dl>
+        <dt>Why</dt><dd>One good answer doesn't show much. Repeating each question under fixed rules shows how often the assistant gets it right.</dd>
+        <dt>Value</dt><dd>It shows what the assistant does well and where it needs checking. It found the true cause in all 9 runs that pointed to a problem, but 2 of those answers had a wrong figure, and only 1 of 3 no-hint runs found all three problems.</dd>
+      </dl>
+    </li>
+  </ol>
+
+  <h2>This sprint</h2>
+  <p class="note">Sprint 5 runs from November 2 to 9. The evaluation above is finished, and these three are still to do.</p>
+  <ol class="timeline now">
+    <li>
+      <h3>Two-minute demo recording</h3>
+      <p class="what">A short recording of the assistant answering a question, linked from the README along with the final results.</p>
+      <dl>
+        <dt>Why</dt><dd>There's no live demo, because it runs on private accounts.</dd>
+        <dt>Value</dt><dd>A reader can see it working in two minutes without setting anything up.</dd>
+      </dl>
+    </li>
+    <li>
+      <h3>Release notes</h3>
+      <p class="what">A list of what shipped in each release.</p>
+      <dl>
+        <dt>Why</dt><dd>People using a product need to know what changed and when.</dd>
+        <dt>Value</dt><dd>It gives one plain record of what was delivered, release by release.</dd>
+      </dl>
+    </li>
+    <li>
+      <h3>One-page product brief</h3>
+      <p class="what">The customer, the problem, the offer, and a pricing model with its reasoning.</p>
+      <dl>
+        <dt>Why</dt><dd>To work out who would buy this and how it could be priced.</dd>
+        <dt>Value</dt><dd>It puts the business case on one page, and it will say that the assumptions haven't been tested with real customers.</dd>
+      </dl>
+    </li>
+  </ol>
+
+  <h2>Planned after that</h2>
+  <p class="note">The next goal is automatic detection. Today a person has to notice a problem and ask about it, and in the evaluation the assistant sometimes missed the quieter problems when asked to review the whole month. None of this is built yet, and no dates are set.</p>
+  <ol class="timeline next">
+    <li>
+      <h3>Hourly data feed</h3>
+      <p class="what">New simulated payments arrive on a schedule, and the pipeline picks them up, within free-tier limits.</p>
+      <dl>
+        <dt>Why</dt><dd>Detection needs data that keeps arriving, and today's data is one finished month.</dd>
+        <dt>Value</dt><dd>New problems can be planted and caught as they happen, which is closer to real operations.</dd>
+      </dl>
+    </li>
+    <li>
+      <h3>Anomaly detection table</h3>
+      <p class="what">Written, explained thresholds that flag approval drops, decline spikes and slow response times against a normal baseline.</p>
+      <dl>
+        <dt>Why</dt><dd>The bank outage barely moved overall approvals, and the UK slowdown didn't move them at all, so a person watching the headline number would miss both.</dd>
+        <dt>Value</dt><dd>The target is to flag all three planted problems, and to count and list any false alarms. An analyst would then know where to look first.</dd>
+      </dl>
+    </li>
+    <li>
+      <h3>Alert and dashboard</h3>
+      <p class="what">An alert when something is flagged, and a dashboard showing approvals, decline reasons, response times and open flags.</p>
+      <dl>
+        <dt>Why</dt><dd>The project has no graphs or alerts today, so someone has to go looking for problems.</dd>
+        <dt>Value</dt><dd>The detector would flag a problem, the dashboard would show it, and the assistant would explain why it happened.</dd>
+      </dl>
+    </li>
+  </ol>
+
+  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 2, 2026.</footer>
+</main>
+</body>
+</html>

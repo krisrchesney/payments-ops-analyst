@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Project Board</title>
+<meta name="description" content="A read-only view of the Payments Ops Analyst project's sprints, stories and status, copied from its private Jira project.">
+<style>
+:root {
+  --bg: #f7f6f2; --surface: #ffffff; --text: #1d1d1b; --muted: #5f5e58; --line: #e2e0d8; --lane: #efeee8;
+  --accent: #2f5d8a; --accent-soft: #e6eef6; --warn: #8f5514; --warn-soft: #f6ecdc;
+  --done: #2c6e49; --done-soft: #e3f1e8; --on-bar: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161615; --surface: #1f1f1d; --text: #ecebe6; --muted: #a6a59e; --line: #34332f; --lane: #1b1b19;
+    --accent: #8fb6dc; --accent-soft: #23303d; --warn: #e0a560; --warn-soft: #33291b;
+    --done: #7fc79d; --done-soft: #1d2f25; --on-bar: #161615;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161615; --surface: #1f1f1d; --text: #ecebe6; --muted: #a6a59e; --line: #34332f; --lane: #1b1b19;
+  --accent: #8fb6dc; --accent-soft: #23303d; --warn: #e0a560; --warn-soft: #33291b;
+  --done: #7fc79d; --done-soft: #1d2f25; --on-bar: #161615;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text);
+  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+main { max-width: 1040px; margin: 0 auto; padding: 48px 16px 80px; }
+h1 { font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.15; margin: 0 0 12px; letter-spacing: -0.01em; }
+h2 { font-size: 1.35rem; margin: 44px 0 12px; }
+p { margin: 0 0 14px; }
+a { color: var(--accent); }
+.lede { font-size: 1.2rem; color: var(--muted); }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 28px; border-bottom: 1px solid var(--line); }
+.tabs a { padding: 8px 12px; color: var(--muted); text-decoration: none; font-weight: 600; font-size: .95rem; border-bottom: 3px solid transparent; margin-bottom: -1px; }
+.tabs a[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); }
+
+.gantt-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.gantt { min-width: 820px; display: grid; grid-template-columns: 250px repeat(var(--days), 1fr); font-size: .86rem; }
+.gantt > * { min-height: 38px; }
+.head { color: var(--muted); font-size: .76rem; font-weight: 600; text-align: center; padding: 8px 0 6px; border-bottom: 1px solid var(--line); line-height: 1.25; }
+.head.today { color: var(--accent); }
+.group { grid-column: 1 / -1; min-height: 0; padding: 8px 14px 4px; color: var(--muted); font-size: .76rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.name { padding: 8px 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; align-self: center; }
+.cell { grid-column-end: span 1; border-left: 1px solid var(--lane); }
+.cell.today { background: var(--accent-soft); }
+.bar { align-self: center; height: 24px; margin: 0 3px; border-radius: 6px; padding: 0 8px; font-size: .74rem; font-weight: 600; line-height: 24px; white-space: nowrap; overflow: hidden; z-index: 1; min-height: 0; }
+.bar.Done { background: var(--done); color: var(--on-bar); }
+.bar.InProgress { background: var(--accent); color: var(--on-bar); }
+.unscheduled { align-self: center; padding-left: 8px; color: var(--warn); font-size: .8rem; font-weight: 600; z-index: 1; min-height: 0; }
+
+.filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+.filters button { font: inherit; font-size: .88rem; font-weight: 600; padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-bar); }
+.columns { display: grid; gap: 14px; grid-template-columns: repeat(3, 1fr); align-items: start; }
+.column { background: var(--lane); border-radius: 10px; padding: 10px; }
+.column h3 { display: flex; justify-content: space-between; margin: 2px 4px 10px; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; font-size: .9rem; line-height: 1.4; }
+.card:last-child { margin-bottom: 0; }
+.card p { margin: 0 0 8px; }
+.meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; color: var(--muted); font-size: .76rem; font-weight: 600; }
+.chip { padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+.date { color: var(--done); }
+.empty { color: var(--muted); font-size: .88rem; margin: 2px 4px 6px; }
+footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+@media (max-width: 720px) {
+  .columns { grid-template-columns: 1fr; }
+  .gantt { min-width: 0; width: max-content; grid-template-columns: 124px repeat(var(--days), 44px); }
+  .name { position: sticky; left: 0; z-index: 2; background: var(--surface); white-space: normal; font-size: .8rem; line-height: 1.2; padding: 6px 10px; align-self: stretch; display: flex; align-items: center; }
+}
+</style>
+</head>
+<body>
+<main>
+  <nav class="tabs" aria-label="Project pages">
+    <a href="./">Overview</a>
+    <a href="roadmap.html">Scope and timeline</a>
+    <a href="board.html" aria-current="page">Project board</a>
+  </nav>
+
+  <h1>Project board</h1>
+  <p class="lede">Every sprint and work item in this project, copied from its private Jira project. To see why each piece matters, read the <a href="roadmap.html">scope and timeline</a>.</p>
+  <p id="updated"></p>
+
+  <h2>Timeline</h2>
+  <div class="gantt-wrap"><div class="gantt" id="gantt"></div></div>
+
+  <h2>Board</h2>
+  <div class="filters" id="filters" role="group" aria-label="Choose a sprint"></div>
+  <div class="columns" id="columns"></div>
+
+  <footer>A read-only copy, updated by hand from Jira, so it can lag behind the live project. All card data in this project is simulated.</footer>
+</main>
+<script>
+const DAY = 86400000;
+const toDay = s => Date.UTC(+s.slice(0, 4), +s.slice(5, 7) - 1, +s.slice(8, 10));
+const label = (s, opts) => new Date(toDay(s)).toLocaleDateString("en-US", { timeZone: "UTC", ...opts });
+const el = (tag, cls, text) => {
+  const node = document.createElement(tag);
+  if (cls) node.className = cls;
+  if (text !== undefined) node.textContent = text;
+  return node;
+};
+
+function renderGantt(data) {
+  const gantt = document.getElementById("gantt");
+  const start = toDay(data.timeline.start);
+  const days = Math.round((toDay(data.timeline.end) - start) / DAY) + 1;
+  const today = Math.round((toDay(data.updated) - start) / DAY);
+  gantt.style.setProperty("--days", days);
+
+  gantt.append(el("div", "head"));
+  for (let d = 0; d < days; d++) {
+    const iso = new Date(start + d * DAY).toISOString().slice(0, 10);
+    gantt.append(el("div", "head" + (d === today ? " today" : ""), label(iso, { month: "short", day: "numeric" })));
+  }
+
+  let row = 2;
+  const addRow = item => {
+    const name = el("div", "name", item.name);
+    name.title = item.name;
+    name.style.gridRow = row;
+    name.style.gridColumn = 1;
+    gantt.append(name);
+    for (let d = 0; d < days; d++) {
+      const cell = el("div", "cell" + (d === today ? " today" : ""));
+      cell.style.gridRow = row;
+      cell.style.gridColumn = d + 2;
+      gantt.append(cell);
+    }
+    if (item.start) {
+      const from = Math.round((toDay(item.start) - start) / DAY);
+      const to = Math.round((toDay(item.end) - start) / DAY);
+      const bar = el("div", "bar " + item.status.replace(" ", ""), item.status);
+      bar.style.gridRow = row;
+      bar.style.gridColumn = `${from + 2} / ${to + 3}`;
+      gantt.append(bar);
+    } else {
+      const none = el("div", "unscheduled", "Planned, no dates set");
+      none.style.gridRow = row;
+      none.style.gridColumn = `2 / ${days + 2}`;
+      gantt.append(none);
+    }
+    row++;
+  };
+  const addGroup = text => {
+    const group = el("div", "group", text);
+    group.style.gridRow = row++;
+    gantt.append(group);
+  };
+
+  addGroup("Sprints");
+  data.sprints.forEach(s => addRow({ name: s.name, start: s.start, end: s.end, status: s.state }));
+  addGroup("Epics");
+  data.epics.forEach(addRow);
+}
+
+function renderBoard(data, filter) {
+  const box = document.getElementById("columns");
+  box.replaceChildren();
+  const items = data.issues.filter(i => filter === "All" || i.sprint === filter);
+  ["To Do", "In Progress", "Done"].forEach(status => {
+    const inColumn = items.filter(i => i.status === status);
+    const column = el("section", "column");
+    const title = el("h3");
+    title.append(el("span", "", status), el("span", "", inColumn.length));
+    column.append(title);
+    if (!inColumn.length) column.append(el("p", "empty", "Nothing here"));
+    inColumn.forEach(i => {
+      const card = el("article", "card");
+      card.append(el("p", "", i.title));
+      const meta = el("div", "meta");
+      meta.append(el("span", "", i.key), el("span", "chip", i.epic));
+      if (i.done) meta.append(el("span", "date", "Done " + label(i.done, { month: "short", day: "numeric" })));
+      card.append(meta);
+      column.append(card);
+    });
+    box.append(column);
+  });
+}
+
+function renderFilters(data) {
+  const box = document.getElementById("filters");
+  const current = data.sprints.find(s => s.current).id;
+  const options = [
+    ...data.sprints.map(s => [s.id, s.name.split(":")[0] + (s.current ? " (current)" : "")]),
+    ["Backlog", "Backlog"],
+    ["All", "All work"],
+  ];
+  const select = id => {
+    [...box.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.id === id)));
+    renderBoard(data, id);
+  };
+  options.forEach(([id, text]) => {
+    const button = el("button", "", text);
+    button.type = "button";
+    button.dataset.id = id;
+    button.addEventListener("click", () => select(id));
+    box.append(button);
+  });
+  select(current);
+}
+
+fetch("board-data.json")
+  .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+  .then(data => {
+    const done = data.issues.filter(i => i.status === "Done").length;
+    document.getElementById("updated").textContent =
+      `${done} of ${data.issues.length} stories and tasks are done. Last updated ${label(data.updated, { month: "long", day: "numeric", year: "numeric" })}.`;
+    renderGantt(data);
+    renderFilters(data);
+  })
+  .catch(() => {
+    document.getElementById("updated").textContent = "The board data couldn't be loaded. Please refresh the page.";
+  });
+</script>
+</body>
+</html>
