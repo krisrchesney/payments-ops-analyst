@@ -36,7 +36,8 @@ Payment operations analysts see the daily approval rate, decline mix and latency
 - **R1 (Sprints 1-2):** pipeline bronze to gold; incidents visible by hand.
 - **R2 (Sprint 3):** MCP server with query tools; Claude answers questions; daily note draft.
 - **R3 (Sprint 4):** runbook search (RAG), so answers can cite why a metric moved.
-- **R4 (Sprint 5):** formal evaluation against incidents.json; demo recording; operational reports product brief.
+- **R4 (Sprint 5):** formal evaluation against incidents.json; operational reports product brief. The demo recording moved to a later date.
+- **R5 (Sprint 6):** automatic detection: hourly feed, anomaly table, alert and dashboard.
 
 ## Risks
 - Free Edition compute quota stops runs for the day: keep data small.

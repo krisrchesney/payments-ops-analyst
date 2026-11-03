@@ -27,14 +27,17 @@ This file lists only what is built and checked. Each line points to its evidence
 | **Document search for the agent:** a sixth read-only tool, `search_runbooks`; 17 automated tests in all, with the search faked. On the live index, 6 of 6 questions found the expected document in the top 3 (questions written by someone who knew the answers) | `mcp_server/server.py`, `mcp_server/check_retrieval.py`, Jira PAYOPS-66 and 67 |
 | **Agent explains why a metric moved:** asked a question naming neither electronics nor fraud, Claude found the code 59 spike on online electronics, cited the fraud rule change and its rollback, backed it with gold numbers, and listed what it could not confirm. Figures checked by SQL: all matched except one rounding ("about 80×" where the figures give about 86×). It also said it could not show the rise was spread across issuers when the gold tables could have | `docs/sample-why-answer-week-of-2026-09-21.md`, Jira PAYOPS-68 |
 | **Formal agent evaluation:** 4 questions, 3 runs each, with the rules written first and each run limited to the agent's 6 tools in an empty folder. 8 of 12 passed. All 9 runs with a hint found the right incident and cause, and 2 of them failed on one wrong figure. Of the 3 no-hint runs, 1 found all three incidents. Every run took under 1 minute. Figures checked by SQL | `docs/eval.md`, `docs/eval-answers/`, `evals/run_eval.py`, Jira PAYOPS-16 |
+| **Anomaly detection table:** `gold_anomalies` flags approval drops, decline spikes and latency spikes against the median of the previous 14 days. 21 rows from 15,120 checks: all 3 planted incidents flagged, no flag on a normal day. Not an independent test, because the thresholds were set knowing the answers. 4 flags on incident days are only partly explained by the incident | `pipelines/transformations/gold.py`, `docs/detection.md`, Jira PAYOPS-56 (still open) |
 | **Product ownership:** PRD, epics, user stories with acceptance criteria, short sprints in Jira with planning, review and retro; every story closed with an evidence comment. Release notes and a one-page product brief, with pricing labeled as an untested assumption | `docs/product/PRD.md`, `docs/product/releases.md`, `docs/product/brief.md`, private Jira project PAYOPS |
 
 ## Not finished yet
 
 | What | Status |
 |---|---|
-| Demo recording | Sprint 5, not started |
-| Live monitoring (hourly feed, detectors, alerts, dashboard) | Planned in Jira, not started. Nothing detects incidents automatically today, and the repo has no dashboard |
+| Demo recording | Not done yet. Moved out of Sprint 5, no date set |
+| Test of detection on a newly planted incident | Sprint 6, not started. Depends on the hourly feed |
+| Hourly data feed | Sprint 6, not started |
+| Alert and dashboard | Sprint 6, not started. Nothing alerts anyone today, the repo has no dashboard, and the assistant can't read the flags yet |
 
 ## Skills used
 

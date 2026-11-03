@@ -2,11 +2,27 @@
 
 *A personal project on simulated data. A release here means work finished and checked, not software shipped to customers. Evidence for each item is in the [project summary](../project-summary.md).*
 
-## R4: Evaluation and launch (in progress, due by November 9, 2026)
+## R5: Detection (in progress, due by November 9, 2026)
+
+**Goal:** flag unusual changes automatically, so a person doesn't have to notice a problem first.
+
+**Added so far**
+- A `gold_anomalies` table that flags approval drops, decline spikes and latency spikes against the previous 14 days. Its [thresholds, flags and limits](../detection.md) are written up.
+
+**Checked:** all 3 planted incidents were flagged in 21 rows from 15,120 checks, with no flag on a normal day.
+
+**Still to do:** an hourly data feed, a test on a newly planted incident, and an alert and dashboard.
+
+**Known limits**
+- The thresholds were set knowing the answers, so this isn't an independent test.
+- Some flags on incident days are only partly explained by the incident, and could point someone to a bank that has no problem.
+- The assistant can't read this table yet.
+
+## R4: Evaluation and launch (November 2, 2026)
 
 **Goal:** measure how well the assistant works, and make the project easy to review.
 
-**Added so far**
+**Added**
 - A [formal evaluation](../eval.md): 12 isolated runs, graded against rules written before any run. 8 of 12 passed.
 - A [scope and timeline page](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html) and a read-only [project board](https://krisrchesney.github.io/payments-ops-analyst/board.html).
 - These release notes and a [one-page product brief](brief.md).
@@ -16,7 +32,7 @@
 - The tools now return dates as `2026-09-12` instead of `2026-09-12T00:00:00.000`.
 - The automated tests now use the current GitHub Actions versions.
 
-**Still to do:** a two-minute demo recording.
+**Moved out:** the two-minute demo recording, so detection could come first. No date is set.
 
 **Known limits**
 - 2 of the 9 answers to questions that pointed to a problem contained a wrong figure, so answers still need checking.

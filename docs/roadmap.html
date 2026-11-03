@@ -81,8 +81,8 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <p class="lede">What this project covers, what has been built and what comes next, with the reason for each piece of work. For every work item and its status, see the <a href="board.html">project board</a>.</p>
   <div class="bar">
     <div class="stat done"><b>11</b><strong>milestones finished</strong><span>October 27 to November 2, 2026</span></div>
-    <div class="stat now"><b>1</b><strong>still to do this sprint</strong><span>Due by November 9, 2026</span></div>
-    <div class="stat next"><b>3</b><strong>planned after that</strong><span>No dates set</span></div>
+    <div class="stat now"><b>3</b><strong>in this sprint</strong><span>Due by November 9, 2026</span></div>
+    <div class="stat next"><b>1</b><strong>planned after that</strong><span>No date set</span></div>
   </div>
 
   <h2>Scope</h2>
@@ -95,6 +95,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
         <li>An AI assistant that explains changes from those reports and from searchable documents</li>
         <li>A drafted daily note for the operations manager</li>
         <li>Testing the assistant against known answers</li>
+        <li>Automatic flags for unusual changes, with an alert and a dashboard</li>
       </ul>
     </div>
     <div class="box">
@@ -212,8 +213,40 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   </ol>
 
   <h2>This sprint</h2>
-  <p class="note">Sprint 5 runs from November 2 to 9. The demo recording is the one item left.</p>
+  <p class="note">Sprint 6 runs from November 2 to 9. The goal is automatic detection. Today a person has to notice a problem and ask about it, and in the evaluation the assistant sometimes missed the quieter problems when asked to review the whole month.</p>
   <ol class="timeline now">
+    <li>
+      <span class="when">In progress</span>
+      <h3>Anomaly detection table</h3>
+      <p class="what">Written, explained thresholds that flag approval drops, decline spikes and slow response times against a normal baseline. <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/detection.md"><strong>All three planted problems are flagged, with no flag on a normal day.</strong></a></p>
+      <dl>
+        <dt>Why</dt><dd>The bank outage barely moved overall approvals, and the UK slowdown didn't move them at all, so a person watching the headline number would miss both.</dd>
+        <dt>Value</dt><dd>An analyst knows where to look first. The thresholds were set knowing the answers, so this isn't finished until a new planted problem has been tested and the result reported.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">Not started</span>
+      <h3>Hourly data feed</h3>
+      <p class="what">New simulated payments arrive on a schedule, and the pipeline picks them up, within free-tier limits.</p>
+      <dl>
+        <dt>Why</dt><dd>Detection needs data that keeps arriving, and today's data is one finished month.</dd>
+        <dt>Value</dt><dd>New problems can be planted and caught as they happen, which is closer to real operations.</dd>
+      </dl>
+    </li>
+    <li>
+      <span class="when">Not started</span>
+      <h3>Alert and dashboard</h3>
+      <p class="what">An alert when something is flagged, and a dashboard showing approvals, decline reasons, response times and open flags.</p>
+      <dl>
+        <dt>Why</dt><dd>The project has no graphs or alerts today, so someone has to go looking for problems.</dd>
+        <dt>Value</dt><dd>The detector would flag a problem, the dashboard would show it, and the assistant would explain why it happened.</dd>
+      </dl>
+    </li>
+  </ol>
+
+  <h2>Planned after that</h2>
+  <p class="note">The demo recording moved out of Sprint 5 so detection could come first. No date is set.</p>
+  <ol class="timeline next">
     <li>
       <h3>Two-minute demo recording</h3>
       <p class="what">A short recording of the assistant answering a question, linked from the README along with the final results.</p>
@@ -224,36 +257,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     </li>
   </ol>
 
-  <h2>Planned after that</h2>
-  <p class="note">The next goal is automatic detection. Today a person has to notice a problem and ask about it, and in the evaluation the assistant sometimes missed the quieter problems when asked to review the whole month. None of this is built yet, and no dates are set.</p>
-  <ol class="timeline next">
-    <li>
-      <h3>Hourly data feed</h3>
-      <p class="what">New simulated payments arrive on a schedule, and the pipeline picks them up, within free-tier limits.</p>
-      <dl>
-        <dt>Why</dt><dd>Detection needs data that keeps arriving, and today's data is one finished month.</dd>
-        <dt>Value</dt><dd>New problems can be planted and caught as they happen, which is closer to real operations.</dd>
-      </dl>
-    </li>
-    <li>
-      <h3>Anomaly detection table</h3>
-      <p class="what">Written, explained thresholds that flag approval drops, decline spikes and slow response times against a normal baseline.</p>
-      <dl>
-        <dt>Why</dt><dd>The bank outage barely moved overall approvals, and the UK slowdown didn't move them at all, so a person watching the headline number would miss both.</dd>
-        <dt>Value</dt><dd>The target is to flag all three planted problems, and to count and list any false alarms. An analyst would then know where to look first.</dd>
-      </dl>
-    </li>
-    <li>
-      <h3>Alert and dashboard</h3>
-      <p class="what">An alert when something is flagged, and a dashboard showing approvals, decline reasons, response times and open flags.</p>
-      <dl>
-        <dt>Why</dt><dd>The project has no graphs or alerts today, so someone has to go looking for problems.</dd>
-        <dt>Value</dt><dd>The detector would flag a problem, the dashboard would show it, and the assistant would explain why it happened.</dd>
-      </dl>
-    </li>
-  </ol>
-
-  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 2, 2026.</footer>
+  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 3, 2026.</footer>
 </main>
 </body>
 </html>

@@ -27,7 +27,7 @@ An assistant that answers "what changed, where and why?" in plain English, from 
 **What the evaluation says about it today**
 - When a question pointed to a problem, it found the true cause in 9 of 9 runs.
 - 2 of those 9 answers had a wrong figure, so a person still needs to check the numbers.
-- With no hint, only 1 of 3 runs found all three planted problems, and nothing watches the data on its own yet. A real product would need the [planned automatic detection](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html).
+- With no hint, only 1 of 3 runs found all three planted problems, and nothing alerts anyone yet. A real product would need the [automatic detection now in progress](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html), which has only been [checked on the incidents it was tuned on](../detection.md).
 
 These results come from [simulated data and documents](../eval.md), so they don't predict performance on a real company's data.
 
