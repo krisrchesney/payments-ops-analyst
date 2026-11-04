@@ -1,0 +1,40 @@
+# Hourly feed (PAYOPS-55): writes the next simulated hour of authorizations into the landing volume,
+# then refreshes the pipeline so the new rows reach bronze, silver, gold and gold_anomalies.
+#
+# The schedule is paused. Unpause it on the Jobs page to run hourly, and pause it again afterwards: each run
+# starts a pipeline update, which is the part that uses Free Edition compute. To catch the clock up with one
+# pipeline update instead of many, run it by hand with more hours:
+#   databricks bundle run payments_ops_feed --params hours=24 --profile DEFAULT
+resources:
+  jobs:
+    payments_ops_feed:
+      name: payments-ops-feed
+      max_concurrent_runs: 1
+      performance_target: STANDARD  # cheaper start-up; nothing waits on this job
+      parameters:
+        - name: hours
+          default: "1"
+      schedule:
+        quartz_cron_expression: "0 0 * * * ?"
+        timezone_id: UTC
+        pause_status: PAUSED
+      # Serverless. The script needs only pandas, numpy and pyarrow, which the environment already has.
+      environments:
+        - environment_key: feed
+          spec:
+            environment_version: "4"
+      tasks:
+        - task_key: write_hours
+          environment_key: feed
+          spark_python_task:
+            python_file: ../generator/feed_hour.py
+            parameters:
+              - --landing
+              - /Volumes/${var.catalog}/${var.schema}/landing
+              - --hours
+              - "{{job.parameters.hours}}"
+        - task_key: refresh_pipeline
+          depends_on:
+            - task_key: write_hours
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.payments_ops_pipeline.id}

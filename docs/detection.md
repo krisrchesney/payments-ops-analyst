@@ -122,11 +122,11 @@ None of these lost an incident, because each one was flagged elsewhere.
 - **The planted incidents are large.** Latency was multiplied by 6 and electronics declines rose about 70 times. A spike of 1.5 times normal wouldn't flag.
 - **No flags in a series' first 7 days.** Nothing could flag on September 1 to 7.
 - **Long incidents go quiet.** An incident lasting more than about a week would become most of the 14-day window, pull the median toward it and stop flagging.
-- **Whole days only for approvals and declines.** The INC-1 outage lasted three hours, but its flags only give the date. A day still in progress also isn't handled: a partial day would be compared with full-day baselines, which needs solving before the hourly feed.
+- **Whole days only for approvals and declines.** The INC-1 outage lasted three hours, but its flags only give the date. A day still arriving is skipped until all 24 of its hours are in the data, so a partial day is never compared with full-day baselines. A problem on the current day is therefore flagged only after the day ends.
 - **Rows aren't incidents.** 21 rows describe 3 incidents, and nothing groups them yet. INC-3 alone is 17 rows, and the most useful row isn't marked as such.
 - **The assistant can't read the flags yet.** The table isn't in the export the assistant works from, so it can't use a flag as a starting point.
 - **Only these views are watched.** Approval rate by region and issuer, declines by the two groupings above, and p95 latency by region. Chargebacks and single merchants aren't covered. A problem shows up only if it's visible in one of those views.
 
 ## The independent test
 
-The next step is a new incident planted through the hourly feed, using these same thresholds. Its result will be reported here whichever way it goes, including if it's missed or raises a false alarm. Any later change to a threshold will be listed beside the original numbers, not in place of them.
+The next step is a [test plan](detection-test.md) that plants four new incidents through the hourly feed, using these same thresholds, with predictions and scoring written down before any of the data exists. Its result will be reported here whichever way it goes, including if it's missed or raises a false alarm. Any later change to a threshold will be listed beside the original numbers, not in place of them.

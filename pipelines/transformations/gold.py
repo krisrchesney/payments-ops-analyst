@@ -94,10 +94,20 @@ def _anomaly_rows(df, detector, scope, metric):
                      F.round("score", 2).alias("score"))
 
 
+def _complete_days():
+    """Days that have all 24 hours in the data, so a day still arriving isn't scored against full days."""
+    return (spark.read.table("gold_latency_hourly")
+            .select(F.to_date("event_hour").alias("event_date"), "event_hour").distinct()
+            .groupBy("event_date").agg(F.count("*").alias("hours"))
+            .filter(F.col("hours") == 24)
+            .select("event_date"))
+
+
 def _approval_drops(column, scope):
     daily = (spark.read.table("silver_authorizations")
              .groupBy(F.col(column).alias("entity"), "event_date")
              .agg(F.count("*").alias("auths"), F.sum(F.col("is_approved").cast("int")).alias("approved"))
+             .join(_complete_days(), "event_date")
              .withColumn("value", F.col("approved") / F.col("auths")))
     return _anomaly_rows(
         _with_daily_baseline(daily)
@@ -109,7 +119,7 @@ def _approval_drops(column, scope):
 
 
 def _decline_spikes(table, keys, scope):
-    declines = spark.read.table(table)
+    declines = spark.read.table(table).join(_complete_days(), "event_date")
     counts = declines.groupBy("event_date", *keys).agg(F.sum("declines").alias("value"))
     # A day with no declines has no row, so fill in zeros or the baseline would skip quiet days.
     every_day = (declines.select("event_date").distinct()

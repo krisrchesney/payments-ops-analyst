@@ -8,10 +8,14 @@
 
 **Added so far**
 - A `gold_anomalies` table that flags approval drops, decline spikes and latency spikes against the previous 14 days. Its [thresholds, flags and limits](../detection.md) are written up.
+- An hourly feed job that writes the next simulated hour of payments and refreshes the pipeline. It has been run once by hand, and its schedule is paused.
+- A [test plan](../detection-test.md) for detection, with predictions and scoring written before the data exists.
 
 **Checked:** all 3 planted incidents were flagged in 21 rows from 15,120 checks, with no flag on a normal day.
 
-**Still to do:** an hourly data feed, a test on a newly planted incident, and an alert and dashboard.
+**Checked, feed:** one run added exactly the new file's 2,976 rows to bronze and silver, and the 21 flags didn't change.
+
+**Still to do:** a run from the schedule, the detection test on newly planted incidents, and an alert and dashboard.
 
 **Known limits**
 - The thresholds were set knowing the answers, so this isn't an independent test.

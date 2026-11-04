@@ -1,0 +1,38 @@
+[
+  {
+    "id": "TEST-A",
+    "type": "latency_spike",
+    "region": "DE",
+    "latency_multiplier": 2.2,
+    "start": "2026-10-03T14:00:00+00:00",
+    "end": "2026-10-03T17:00:00+00:00",
+    "effect": "Authorization latency in DE about 2.2x normal for 3 hours. Approvals unchanged."
+  },
+  {
+    "id": "TEST-B",
+    "type": "issuer_outage",
+    "issuer_id": "I017",
+    "hit_rate": 0.25,
+    "start": "2026-10-05T10:00:00+00:00",
+    "end": "2026-10-05T12:00:00+00:00",
+    "effect": "A quarter of Vance Credit Union's authorizations decline with 91 (issuer unavailable) for 2 hours."
+  },
+  {
+    "id": "TEST-C",
+    "type": "fraud_rule_tightened",
+    "mcc": "4511",
+    "decline_rate": 0.05,
+    "start": "2026-10-07T00:00:00+00:00",
+    "end": "2026-10-08T00:00:00+00:00",
+    "effect": "5% of Airlines ecommerce authorizations decline with 59 (suspected fraud) for one day."
+  },
+  {
+    "id": "TEST-D",
+    "type": "fraud_rule_tightened",
+    "mcc": "5812",
+    "decline_rate": 0.008,
+    "start": "2026-10-09T00:00:00+00:00",
+    "end": "2026-10-10T00:00:00+00:00",
+    "effect": "0.8% of Restaurants ecommerce authorizations decline with 59 for one day. Written down as expected to be missed."
+  }
+]
