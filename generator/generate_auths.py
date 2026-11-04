@@ -18,7 +18,6 @@ from datetime import datetime, timedelta, timezone
 
 import numpy as np
 import pandas as pd
-from faker import Faker
 
 REGIONS = ["US-Midwest", "US-Northeast", "US-South", "US-West", "CA", "UK", "DE", "BR"]
 REGION_WEIGHTS = [0.18, 0.17, 0.2, 0.17, 0.07, 0.09, 0.07, 0.05]
@@ -91,13 +90,13 @@ def generate_chunk(rng, n, start, days, merchants, issuers, incidents, id_offset
         s, e = pd.Timestamp(inc["start"]), pd.Timestamp(inc["end"])
         in_window = (ts >= s) & (ts < e)
         if inc["type"] == "issuer_outage":
-            hit = in_window & (iss["issuer_id"].to_numpy() == inc["issuer_id"]) & (rng.random(n) < 0.8)
+            hit = in_window & (iss["issuer_id"].to_numpy() == inc["issuer_id"]) & (rng.random(n) < inc.get("hit_rate", 0.8))
             codes[hit] = "91"
         elif inc["type"] == "latency_spike":
             hit = in_window & (m["region"].to_numpy() == inc["region"])
-            latency[hit] *= 6
+            latency[hit] *= inc.get("latency_multiplier", 6)
         elif inc["type"] == "fraud_rule_tightened":
-            hit = in_window & (m["mcc"].to_numpy() == inc["mcc"]) & (channel == "ecommerce") & (rng.random(n) < 0.35)
+            hit = in_window & (m["mcc"].to_numpy() == inc["mcc"]) & (channel == "ecommerce") & (rng.random(n) < inc.get("decline_rate", 0.35))
             codes[hit] = "59"
 
     return pd.DataFrame({
@@ -143,6 +142,7 @@ def main(argv=None):
     ap.add_argument("--out", default="out")
     a = ap.parse_args(argv)
 
+    from faker import Faker  # only the month-long run needs it, so the hourly feed doesn't
     rng = np.random.default_rng(a.seed)
     fake = Faker()
     Faker.seed(a.seed)

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-03",
+  "updated": "2026-11-04",
   "timeline": {"start": "2026-10-27", "end": "2026-11-09"},
   "sprints": [
     {"id": "S1", "name": "Sprint 1", "start": "2026-10-27", "end": "2026-10-27", "state": "Done"},
@@ -36,7 +36,7 @@
     {"key": "PAYOPS-17", "type": "Story", "title": "As a hiring manager, I can understand the project in two minutes from the README and a recording.", "status": "To Do", "epic": "Launch", "sprint": "Backlog"},
     {"key": "PAYOPS-18", "type": "Story", "title": "As the product owner, I publish release notes for R1, R2, R3 and R4.", "status": "Done", "epic": "Launch", "sprint": "S5", "done": "2026-11-02"},
     {"key": "PAYOPS-19", "type": "Story", "title": "As the product owner, I write a one-page operational reports product brief with a pricing hypothesis.", "status": "Done", "epic": "Launch", "sprint": "S5", "done": "2026-11-02"},
-    {"key": "PAYOPS-55", "type": "Story", "title": "As an ops analyst, new synthetic authorizations arrive every hour and the pipeline picks them up on a schedule.", "status": "To Do", "epic": "Live monitoring", "sprint": "S6"},
+    {"key": "PAYOPS-55", "type": "Story", "title": "As an ops analyst, new synthetic authorizations arrive every hour and the pipeline picks them up on a schedule.", "status": "In Progress", "epic": "Live monitoring", "sprint": "S6"},
     {"key": "PAYOPS-56", "type": "Story", "title": "As an ops analyst, a gold_anomalies table flags unusual drops and spikes compared with a baseline.", "status": "In Progress", "epic": "Live monitoring", "sprint": "S6"},
     {"key": "PAYOPS-57", "type": "Story", "title": "As an ops manager, I get an alert when an anomaly appears and can see the ops view on a dashboard.", "status": "To Do", "epic": "Live monitoring", "sprint": "S6"}
   ]

@@ -221,13 +221,13 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
       <p class="what">Written, explained thresholds that flag approval drops, decline spikes and slow response times against a normal baseline. <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/detection.md"><strong>All three planted problems are flagged, with no flag on a normal day.</strong></a></p>
       <dl>
         <dt>Why</dt><dd>The bank outage barely moved overall approvals, and the UK slowdown didn't move them at all, so a person watching the headline number would miss both.</dd>
-        <dt>Value</dt><dd>An analyst knows where to look first. The thresholds were set knowing the answers, so this isn't finished until a new planted problem has been tested and the result reported.</dd>
+        <dt>Value</dt><dd>An analyst knows where to look first. The thresholds were set knowing the answers, so this isn't finished until new planted problems have been tested and the result reported. A <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/detection-test.md">test plan with written predictions</a> is fixed before that data exists.</dd>
       </dl>
     </li>
     <li>
-      <span class="when">Not started</span>
+      <span class="when">In progress</span>
       <h3>Hourly data feed</h3>
-      <p class="what">New simulated payments arrive on a schedule, and the pipeline picks them up, within free-tier limits.</p>
+      <p class="what">New simulated payments arrive on a schedule, and the pipeline picks them up, within free-tier limits. <strong>Built and run once by hand: the pipeline picked up exactly the 2,976 rows of the new hour.</strong> The schedule is paused for now, because every run starts a pipeline update of about 10 minutes, and hourly runs would use a lot of free-tier compute.</p>
       <dl>
         <dt>Why</dt><dd>Detection needs data that keeps arriving, and today's data is one finished month.</dd>
         <dt>Value</dt><dd>New problems can be planted and caught as they happen, which is closer to real operations.</dd>
@@ -257,7 +257,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     </li>
   </ol>
 
-  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 3, 2026.</footer>
+  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 4, 2026.</footer>
 </main>
 </body>
 </html>

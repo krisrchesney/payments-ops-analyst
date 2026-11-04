@@ -77,7 +77,8 @@ Card payments typically run on the four-party model: the cardholder and their ba
 - [x] Agent explains a metric move by citing a document and gold numbers (`docs/sample-why-answer-week-of-2026-09-21.md`)
 - [x] Formal agent evaluation: [8 of 12 runs passed](docs/eval.md). All 9 runs with a hint found the right cause, 2 of them had a wrong figure, and 1 of 3 no-hint runs found all three incidents
 - [x] Anomaly table flags all three incidents with no flag on a normal day ([thresholds and limits](docs/detection.md)). Thresholds were set knowing the answers, so this isn't an independent test
-- [ ] Hourly data feed, and a detection test on a newly planted incident
+- [x] Hourly data feed job: one run by hand added exactly the new hour's rows. The schedule is paused, so it hasn't run on its own
+- [ ] Detection test on newly planted incidents: the [plan and predictions](docs/detection-test.md) are written first, and the data isn't generated yet
 - [ ] Alert and dashboard. Today someone has to look, because nothing alerts anyone
 - [ ] Demo recording
 
@@ -98,7 +99,7 @@ The same author wrote the data, documents and questions, so these results don't 
 
 ## Next steps
 
-1. Finish automatic detection: an hourly data feed, a test on a newly planted incident, and an alert and dashboard. See the [scope and timeline](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html).
+1. Finish automatic detection: run the [detection test](docs/detection-test.md) on newly planted incidents, then add an alert and dashboard. See the [scope and timeline](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html).
 2. Record the demo.
 
 Also see the [release notes](docs/product/releases.md) and the [product brief](docs/product/brief.md).
