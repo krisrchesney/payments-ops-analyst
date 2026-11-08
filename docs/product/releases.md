@@ -8,17 +8,19 @@
 
 **Added so far**
 - A `gold_anomalies` table that flags approval drops, decline spikes and latency spikes against the previous 14 days. Its [thresholds, flags and limits](../detection.md) are written up.
-- An hourly feed job that writes the next simulated hour of payments and refreshes the pipeline. It has been run once by hand, and its schedule is paused.
-- A [test plan](../detection-test.md) for detection, with predictions and scoring written before the data exists.
+- An hourly feed job that writes the next simulated hour of payments and refreshes the pipeline. It has been run by hand twice (one hour, then 335 hours), and its schedule is paused.
+- A [test plan](../detection-test.md) for detection, with predictions and scoring written before the data exists, and a [scorer](../../evals/detection_test.py) that applies it.
 
 **Checked:** all 3 planted incidents were flagged in 21 rows from 15,120 checks, with no flag on a normal day.
 
+**Checked, independent test:** on 4 newly planted incidents with the thresholds unchanged, 2 of the 3 expected catches were made (latency and an Airlines fraud rule), 1 was missed by 2.5 declines (a bank outage, 22.5 extra against a minimum of 25), the incident meant to be missed was missed, and there were no false alarms in 10,080 checks. [Details](../detection.md#the-independent-test).
+
 **Checked, feed:** one run added exactly the new file's 2,976 rows to bronze and silver, and the 21 flags didn't change.
 
-**Still to do:** a run from the schedule, the detection test on newly planted incidents, and an alert and dashboard.
+**Still to do:** a run from the schedule, and an alert and dashboard.
 
 **Known limits**
-- The thresholds were set knowing the answers, so this isn't an independent test.
+- The first table's thresholds were set knowing the answers. The independent test is small: four incidents, in the same simulator.
 - Some flags on incident days are only partly explained by the incident, and could point someone to a bank that has no problem.
 - The assistant can't read this table yet.
 

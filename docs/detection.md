@@ -1,8 +1,10 @@
 # Automatic detection
 
-*All data is synthetic. The figures here come from the `gold_anomalies` table and read-only queries on the same data, run on November 3, 2026.*
+*All data is synthetic. The figures here come from the `gold_anomalies` table and read-only queries on the same data. The first table was checked on November 3, 2026, and the independent test was scored on November 8, 2026.*
 
-**Result: all 3 planted incidents were flagged, and no flag fell on a normal day.** The table has 21 rows from 15,120 checks over September 8 to 28. This is not an independent test, because the thresholds were chosen knowing the answers. [The real test is still to come.](#the-independent-test)
+**Result: all 3 planted incidents were flagged, and no flag fell on a normal day.** The table has 21 rows from 15,120 checks over September 8 to 28. This is not an independent test, because the thresholds were chosen knowing the answers.
+
+**Independent test (November 8): 2 of the 3 incidents it should catch were caught, and 1 was missed by 2.5 declines. The one it should miss was missed. No false alarms in 10,080 checks.** The thresholds were unchanged. [Details below.](#the-independent-test)
 
 ## What this does
 
@@ -117,7 +119,7 @@ None of these lost an incident, because each one was flagged elsewhere.
 
 ## Limits
 
-- **Tuned on known answers.** The thresholds were set while looking at these incidents, so this result shows the checks can work, not that they will.
+- **Tuned on known answers, then tested once.** The thresholds were set while looking at the first three incidents. The [independent test](#the-independent-test) used four new ones, which is a small test: two caught cleanly, one missed by a narrow margin, one missed as planned.
 - **The data is easier than real payments.** The simulator spreads volume evenly across every hour and day, with no weekends or daily peaks, and latency has no daily pattern. Real data would raise false alarms that this table can't show. The latency ratio is the most exposed, because it compares every hour with the same median.
 - **The planted incidents are large.** Latency was multiplied by 6 and electronics declines rose about 70 times. A spike of 1.5 times normal wouldn't flag.
 - **No flags in a series' first 7 days.** Nothing could flag on September 1 to 7.
@@ -129,4 +131,49 @@ None of these lost an incident, because each one was flagged elsewhere.
 
 ## The independent test
 
-The next step is a [test plan](detection-test.md) that plants four new incidents through the hourly feed, using these same thresholds, with predictions and scoring written down before any of the data exists. Its result will be reported here whichever way it goes, including if it's missed or raises a false alarm. Any later change to a threshold will be listed beside the original numbers, not in place of them.
+The [test plan](detection-test.md) planted four new incidents through the hourly feed, with the thresholds frozen and the predictions and scoring written down before any test data existed.
+
+### What was run
+
+- **The data.** The hourly feed job wrote 336 hours, September 29 to October 12, at 2,976 authorizations an hour: one hour in an earlier test run on November 3, and the other 335 in one run on November 4 (about 9.5 minutes, with the pipeline refreshed at the end). The volume holds one file per hour, and the pipeline's silver table has 999,936 rows from September 29, the same count as a second copy of the data made locally from the same seeds.
+- **The incidents.** Four, listed in [`detection-test-incidents.json`](detection-test-incidents.json) and loaded before the hours they cover.
+- **The scoring.** The rules in the plan, in [`evals/detection_test.py`](../evals/detection_test.py). That script was written after the data existed and committed before its author read any of the flags. A test keeps its thresholds identical to `gold.py`. The plan, not the script, is what was fixed in advance.
+- **The thresholds.** Unchanged from the first table.
+
+### Results
+
+| Test | Planted | Predicted | What happened |
+|---|---|---|---|
+| A | DE latency about 2.2 times normal, Oct 3, 14:00 to 17:00 | At least 2 of 3 hours flagged | **Caught, all 3 hours.** Scores 2.26, 2.33 and 2.16 against a line of 2.0 |
+| B | A quarter of Vance Credit Union's authorizations decline with 91, Oct 5, 10:00 to 12:00 | A decline spike, about 37 extra declines | **Missed.** 22.5 extra declines against a minimum of 25. The score, 6.63, would have flagged |
+| C | 5% of Airlines ecommerce authorizations decline with 59, Oct 7 | A decline spike, about 88 extra | **Caught.** 105 declines against a baseline of 8 (97 extra), score 34.29 |
+| D | 0.8% of Restaurants ecommerce authorizations decline with 59, Oct 9 | **Missed on purpose**, about 18 extra | **Missed.** 20.5 extra against the minimum of 25. The score, 6.05, would have flagged |
+
+Scoring, by the plan's rules: 4 flag rows on the 14 days, all hits (A 3 hours, C 1). 0 explained flags, 0 false alarms, from 10,080 series-days checked. Surprises: 1, test B was expected to flag and didn't. By the plan's own measure of a good result (A, B and C all caught, no false alarms, D missed), this is a partial pass.
+
+### Why test B was missed
+
+The data held 135 Vance Credit Union requests in the two-hour window, and 27 of them declined with 91. That is a rate of 20% where 25% was planned, which would give about 34. On the day, Vance had 34 declines with code 91 against a baseline of 11.5, so 22.5 extra. The minimum is 25.
+
+The plan's prediction was wrong in two ways. It said about 37 extra, and the planted rate gives about 34 declines in all, not 34 extra on top of the baseline. And the draw came out below the planted rate. The miss is the 25-decline minimum doing what the first section said it might: stopping a real problem that is just under the line. It is not a flaw that appeared from nowhere.
+
+**A change was not made.** Looking only at what a lower minimum would do, in this data a minimum of 20 would have flagged B and D and nothing else, because every other series with 20 or more extra declines scored under 5. That is a look back at the same data, so it proves nothing, and tuning to it would repeat the problem of the first table. If the minimum is changed later, both results will be listed side by side.
+
+### Closest calls
+
+**Normal days that came close**
+
+- Approval: the highest score was Jones Financial on Oct 10 at 2.61, against a line of 4. Vance Credit Union's approval on Oct 5 scored under 2.2, so the 1-in-4 chance the plan gave of a flag there didn't happen.
+- Latency: the highest normal hour was BR on Oct 1 at 05:00, 1.29 times baseline, against a line of 2.0. The hours with the planted spike scored 2.16 to 2.33, so that margin is thin.
+- Decline spikes: Zuniga Financial code 05 on Oct 7 had 26.0 extra declines, enough for the minimum, but scored 3.68 against a line of 5. Grocery stores, card present, code 51 on Oct 4 scored 4.14 with 22.5 extra.
+
+**Incident days that didn't flag**
+
+- Test B at 22.5 extra declines and test D at 20.5 extra, both described above.
+
+### What this shows, and what it doesn't
+
+- **The checks behaved as their arithmetic said.** The two strongest signals (A and C) were caught, no normal day flagged, and the one miss was a series just under a minimum written down in advance.
+- **Four incidents is a small test.** One miss out of three catchable ones is a narrow margin to learn from, and the thresholds' thin margins from the first table are still thin: latency passed by 0.16 at its weakest hour.
+- **The data is the same simulator.** It has no weekends, daily peaks or uneven issuer sizes, so real false alarms would be more common than the 0 seen here.
+- **My predictions were rough.** I wrote them from volume arithmetic, and one was off by about 15 declines. They were left as written.

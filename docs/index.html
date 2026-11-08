@@ -76,7 +76,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     <a class="btn" href="https://github.com/krisrchesney/payments-ops-analyst">Code on GitHub</a>
     <a class="btn" href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/sample-why-answer-week-of-2026-09-21.md">Read a full sample answer</a>
   </div>
-  <p class="note status"><strong>Where the project stands:</strong> 18 of 22 work items are done, and Sprint 6 runs through November 9, 2026. <a href="board.html">See the project board</a> or <a href="roadmap.html">read the scope and timeline.</a></p>
+  <p class="note status"><strong>Where the project stands:</strong> 20 of 22 work items are done, and Sprint 6 runs through November 9, 2026. <a href="board.html">See the project board</a> or <a href="roadmap.html">read the scope and timeline.</a></p>
 
   <h2>The problem</h2>
   <p>Every time someone pays by card, the payment is approved or declined. Payment companies track the approval rate, the share of payments that go through, because every drop means more declines. Some are legitimate, but some are good customers turned away: a lost sale and an unhappy customer.</p>
@@ -144,7 +144,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   <ul>
     <li><strong>The test is easier than real life.</strong> I wrote the data, the documents and the test questions, so I knew the answers. Real change logs are messier and less complete.</li>
     <li><strong>The sample is small.</strong> The evaluation is 12 runs across 4 questions. That shows the assistant's answers vary from run to run, but it isn't a large test.</li>
-    <li><strong>Nothing alerts anyone yet.</strong> A new table <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/detection.md">flags unusual changes</a> and caught all three planted problems, but its thresholds were set knowing the answers, and it hasn't been tested on a new problem. There's no dashboard or alert, so a person still has to look. <a href="roadmap.html">That's the work in progress.</a></li>
+    <li><strong>Nothing alerts anyone yet.</strong> A table <a href="https://github.com/krisrchesney/payments-ops-analyst/blob/master/docs/detection.md">flags unusual changes</a>. It caught all three planted problems, though its thresholds were set knowing the answers. On four new ones it caught 2 of 3, missed 1 by 2.5 declines, and raised no false alarms. That is a small test on the same simulated data. There's no dashboard or alert, so a person still has to look. <a href="roadmap.html">That's the work still to do.</a></li>
     <li><strong>Search results can be close.</strong> In one test, the right document won by 0.620 to 0.617, and a good result doesn't always put the most useful section first.</li>
     <li><strong>The payment flow is simplified.</strong> The data covers the cardholder, merchant, issuer and disputes. It leaves out the acquirer, the network as a separate step, and clearing and settlement. The decline codes follow general ISO 8583 style, while each real network and processor has its own list, so the code numbers here won't match any one network exactly.</li>
     <li><strong>There's no live demo.</strong> It runs on my own Databricks and Claude accounts. You can read the sample answers, or run the code and its tests yourself.</li>

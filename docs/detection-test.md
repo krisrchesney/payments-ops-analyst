@@ -2,6 +2,8 @@
 
 *All data is synthetic. This plan was written before any of the test data was generated, and its predictions are fixed. The results will be added to [the detection write-up](detection.md) whichever way they go.*
 
+**Results (November 8, 2026): [see the detection write-up](detection.md#the-independent-test).** Two of the three incidents it should catch were caught, one was missed by 2.5 declines, the expected miss happened, and there were no false alarms.
+
 ## Why a second test
 
 The first 21 flags came from thresholds chosen while looking at the three planted incidents, so they show the detector can work, not that it will. This test plants new incidents in new data, with the [thresholds frozen](https://github.com/krisrchesney/payments-ops-analyst/blob/master/pipelines/transformations/gold.py) as they are today.
