@@ -1,0 +1,11 @@
+[
+  {
+    "id": "ALERT-DEMO",
+    "type": "fraud_rule_tightened",
+    "mcc": "5732",
+    "decline_rate": 0.35,
+    "start": "2026-10-13T00:00:00+00:00",
+    "end": "2026-10-14T00:00:00+00:00",
+    "effect": "35% of Electronics ecommerce authorizations decline with 59 (suspected fraud) for one day, to show the alert firing."
+  }
+]
