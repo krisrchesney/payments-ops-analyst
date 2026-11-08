@@ -1,0 +1,37 @@
+# SQL alert (PAYOPS-57): fires when gold_anomalies has a flag on the latest day that has all 24 hours in the data.
+# Gold only scores whole days, so "latest complete day" is the newest day anything can be flagged on.
+# The alert is evaluated once a day and runs one small query on the serverless warehouse. Pause it on the Alerts page,
+# or set pause_status to PAUSED here, to stop the runs.
+# Notifications go to whoever deploys the bundle (resolved at deploy time; no address is stored in this repo).
+resources:
+  alerts:
+    payments_ops_flags_alert:
+      display_name: "Payments ops: anomaly flagged on the latest day"
+      warehouse_id: ${var.warehouse_id}
+      query_text: |
+        WITH complete AS (
+          SELECT CAST(event_hour AS DATE) AS d
+          FROM ${var.catalog}.${var.schema}.gold_latency_hourly
+          GROUP BY CAST(event_hour AS DATE)
+          HAVING COUNT(DISTINCT event_hour) = 24
+        )
+        SELECT COUNT(*) AS flags_latest_day
+        FROM ${var.catalog}.${var.schema}.gold_anomalies
+        WHERE CAST(period_start AS DATE) = (SELECT MAX(d) FROM complete)
+      evaluation:
+        comparison_operator: GREATER_THAN
+        source:
+          name: flags_latest_day
+          display: flags_latest_day
+        threshold:
+          value:
+            double_value: 0
+        notification:
+          notify_on_ok: false
+          retrigger_seconds: 86400
+          subscriptions:
+            - user_email: ${workspace.current_user.userName}
+      schedule:
+        pause_status: UNPAUSED
+        quartz_cron_schedule: "0 0 13 * * ?"
+        timezone_id: UTC

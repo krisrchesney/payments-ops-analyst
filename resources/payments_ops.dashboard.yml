@@ -1,0 +1,10 @@
+# AI/BI dashboard (PAYOPS-57): approvals, declines, latency and the flags from gold_anomalies.
+# The dashboard JSON is generated: edit dashboards/build_dashboard.py and run it, do not edit the JSON by hand.
+resources:
+  dashboards:
+    payments_ops_monitor:
+      display_name: "Payments ops monitor"
+      file_path: ../dashboards/payments_ops_monitor.lvdash.json
+      warehouse_id: ${var.warehouse_id}
+      dataset_catalog: ${var.catalog}
+      dataset_schema: ${var.schema}

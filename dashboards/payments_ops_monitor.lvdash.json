@@ -1,0 +1,638 @@
+{
+  "datasets": [
+    {
+      "name": "ds_kpi",
+      "displayName": "Latest complete day",
+      "queryLines": [
+        "WITH complete AS (SELECT CAST(event_hour AS DATE) AS d FROM gold_latency_hourly GROUP BY CAST(event_hour AS DATE) HAVING COUNT(DISTINCT event_hour) = 24), latest AS (SELECT MAX(d) AS day FROM complete) SELECT l.day AS latest_day, (SELECT SUM(approved) * 1.0 / SUM(auths) FROM gold_daily_approval WHERE event_date = l.day) AS approval_rate, (SELECT SUM(declines) FROM gold_decline_reasons WHERE event_date = l.day) AS declines, (SELECT COUNT(*) FROM gold_anomalies WHERE CAST(period_start AS DATE) = l.day) AS flags_latest_day, (SELECT COUNT(*) FROM gold_anomalies WHERE CAST(period_start AS DATE) > date_sub(l.day, 7)) AS flags_last_7_days FROM latest l "
+      ]
+    },
+    {
+      "name": "ds_day",
+      "displayName": "Approval rate by day",
+      "queryLines": [
+        "SELECT event_date, SUM(auths) AS auths, SUM(approved) AS approved, SUM(approved) * 1.0 / SUM(auths) AS approval_rate FROM gold_daily_approval GROUP BY event_date ORDER BY event_date "
+      ]
+    },
+    {
+      "name": "ds_declines",
+      "displayName": "Declines by response code",
+      "queryLines": [
+        "SELECT event_date, response_code, SUM(declines) AS declines FROM gold_decline_reasons GROUP BY event_date, response_code ORDER BY event_date "
+      ]
+    },
+    {
+      "name": "ds_latency",
+      "displayName": "Peak latency by region",
+      "queryLines": [
+        "SELECT CAST(event_hour AS DATE) AS event_date, region, MAX(p95_latency_ms) AS peak_p95_ms FROM gold_latency_hourly GROUP BY CAST(event_hour AS DATE), region ORDER BY event_date "
+      ]
+    },
+    {
+      "name": "ds_flags",
+      "displayName": "Flags",
+      "queryLines": [
+        "SELECT CAST(period_start AS DATE) AS event_date, period_start, detector, entity, observed, baseline, score FROM gold_anomalies ORDER BY period_start DESC, score DESC "
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "overview",
+      "displayName": "Overview",
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "name": "header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "# Payments ops monitor\n",
+                "Approvals, declines, latency and the flags raised by `gold_anomalies`. All data is simulated. The four numbers below describe the latest day with all 24 hours in the data.\n"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi-approval",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi",
+                  "fields": [
+                    {
+                      "name": "approval_rate",
+                      "expression": "`approval_rate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "approval_rate",
+                  "displayName": "Approval rate, latest day",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "title": "Approval rate, latest day",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi-declines",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi",
+                  "fields": [
+                    {
+                      "name": "declines",
+                      "expression": "`declines`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "declines",
+                  "displayName": "Declines, latest day"
+                }
+              },
+              "frame": {
+                "title": "Declines, latest day",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi-flags-day",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi",
+                  "fields": [
+                    {
+                      "name": "flags_latest_day",
+                      "expression": "`flags_latest_day`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "flags_latest_day",
+                  "displayName": "Flags, latest day"
+                }
+              },
+              "frame": {
+                "title": "Flags, latest day",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "kpi-flags-week",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_kpi",
+                  "fields": [
+                    {
+                      "name": "flags_last_7_days",
+                      "expression": "`flags_last_7_days`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "flags_last_7_days",
+                  "displayName": "Flags, last 7 days"
+                }
+              },
+              "frame": {
+                "title": "Flags, last 7 days",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 9,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "approval-trend",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_day",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "approval_rate",
+                      "expression": "`approval_rate`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "event_date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Day"
+                },
+                "y": {
+                  "fieldName": "approval_rate",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Approval rate",
+                  "format": {
+                    "type": "number-percent",
+                    "decimalPlaces": {
+                      "type": "max",
+                      "places": 2
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "title": "Approval rate by day",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "declines-by-code",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_declines",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "response_code",
+                      "expression": "`response_code`"
+                    },
+                    {
+                      "name": "declines",
+                      "expression": "`declines`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "event_date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Day"
+                },
+                "y": {
+                  "fieldName": "declines",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Declines"
+                },
+                "color": {
+                  "fieldName": "response_code",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Response code"
+                }
+              },
+              "frame": {
+                "title": "Declines by response code",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 5,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "latency-by-region",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_latency",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    },
+                    {
+                      "name": "region",
+                      "expression": "`region`"
+                    },
+                    {
+                      "name": "peak_p95_ms",
+                      "expression": "`peak_p95_ms`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "event_date",
+                  "scale": {
+                    "type": "temporal"
+                  },
+                  "displayName": "Day"
+                },
+                "y": {
+                  "fieldName": "peak_p95_ms",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "Highest hourly p95 (ms)"
+                },
+                "color": {
+                  "fieldName": "region",
+                  "scale": {
+                    "type": "categorical"
+                  },
+                  "displayName": "Region"
+                }
+              },
+              "frame": {
+                "title": "Slowest hour of each day, by region (p95 latency)",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 10,
+            "width": 12,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "flags-table",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "ds_flags",
+                  "fields": [
+                    {
+                      "name": "period_start",
+                      "expression": "`period_start`"
+                    },
+                    {
+                      "name": "detector",
+                      "expression": "`detector`"
+                    },
+                    {
+                      "name": "entity",
+                      "expression": "`entity`"
+                    },
+                    {
+                      "name": "observed",
+                      "expression": "`observed`"
+                    },
+                    {
+                      "name": "baseline",
+                      "expression": "`baseline`"
+                    },
+                    {
+                      "name": "score",
+                      "expression": "`score`"
+                    }
+                  ],
+                  "disaggregated": true
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "table",
+              "encodings": {
+                "columns": [
+                  {
+                    "fieldName": "period_start",
+                    "displayName": "When"
+                  },
+                  {
+                    "fieldName": "detector",
+                    "displayName": "Check"
+                  },
+                  {
+                    "fieldName": "entity",
+                    "displayName": "Series"
+                  },
+                  {
+                    "fieldName": "observed",
+                    "displayName": "Observed"
+                  },
+                  {
+                    "fieldName": "baseline",
+                    "displayName": "Baseline"
+                  },
+                  {
+                    "fieldName": "score",
+                    "displayName": "Score"
+                  }
+                ]
+              },
+              "frame": {
+                "title": "Flags raised by gold_anomalies, newest first",
+                "showTitle": true
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ]
+    },
+    {
+      "name": "filters",
+      "displayName": "Filters",
+      "pageType": "PAGE_TYPE_GLOBAL_FILTERS",
+      "layoutVersion": "GRID_V1",
+      "layout": [
+        {
+          "widget": {
+            "name": "filter-date",
+            "queries": [
+              {
+                "name": "q_ds_day",
+                "query": {
+                  "datasetName": "ds_day",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "q_ds_declines",
+                "query": {
+                  "datasetName": "ds_declines",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "q_ds_latency",
+                "query": {
+                  "datasetName": "ds_latency",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              },
+              {
+                "name": "q_ds_flags",
+                "query": {
+                  "datasetName": "ds_flags",
+                  "fields": [
+                    {
+                      "name": "event_date",
+                      "expression": "`event_date`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "event_date",
+                    "queryName": "q_ds_day"
+                  },
+                  {
+                    "fieldName": "event_date",
+                    "queryName": "q_ds_declines"
+                  },
+                  {
+                    "fieldName": "event_date",
+                    "queryName": "q_ds_latency"
+                  },
+                  {
+                    "fieldName": "event_date",
+                    "queryName": "q_ds_flags"
+                  }
+                ]
+              },
+              "frame": {
+                "showTitle": true,
+                "title": "Date range"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 4,
+            "height": 2
+          }
+        }
+      ]
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#FCFCFC",
+        "dark": "#1F272D"
+      },
+      "widgetBackgroundColor": {
+        "light": "#FFFFFF",
+        "dark": "#11171C"
+      },
+      "fontColor": {
+        "light": "#11171C",
+        "dark": "#E8ECF0"
+      },
+      "selectionColor": {
+        "light": "#2272B4",
+        "dark": "#8ACAFF"
+      },
+      "visualizationColors": [
+        "#0072B2",
+        "#E69F00",
+        "#009E73",
+        "#CC79A7",
+        "#D55E00",
+        "#56B4E9",
+        "#7A7A7A",
+        "#F0E442"
+      ],
+      "widgetHeaderAlignment": "LEFT"
+    }
+  }
+}

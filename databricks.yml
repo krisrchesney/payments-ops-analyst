@@ -18,6 +18,10 @@ variables:
   schema:
     description: Schema for the bronze, silver and gold tables. The landing volume lives here too.
     default: payments
+  warehouse_id:
+    description: SQL warehouse that runs the dashboard and the alert. Found by name, so no workspace id is stored here.
+    lookup:
+      warehouse: Serverless Starter Warehouse
 
 targets:
   # dev: development mode. The pipeline is named "[dev <you>] payments-ops-pipeline" and runs in development mode.
