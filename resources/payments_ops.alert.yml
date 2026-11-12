@@ -32,6 +32,6 @@ resources:
           subscriptions:
             - user_email: ${workspace.current_user.userName}
       schedule:
-        pause_status: UNPAUSED
+        pause_status: PAUSED
         quartz_cron_schedule: "0 0 13 * * ?"
         timezone_id: UTC
