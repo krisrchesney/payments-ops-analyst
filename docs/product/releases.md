@@ -2,7 +2,7 @@
 
 *A personal project on simulated data. A release here means work finished and checked, not software shipped to customers. Evidence for each item is in the [project summary](../project-summary.md).*
 
-## R5: Detection (in progress, due by November 9, 2026)
+## R5: Detection (November 12, 2026)
 
 **Goal:** flag unusual changes automatically, so a person doesn't have to notice a problem first.
 
@@ -17,7 +17,11 @@
 
 **Checked, feed:** one run added exactly the new file's 2,976 rows to bronze and silver, and the 21 flags didn't change.
 
-**Still to do:** a run from the schedule, and an alert and dashboard.
+- A daily alert and an ops dashboard, both deployed from the project's code (November 12). Dashboard: approval rate, declines, response times and the open flags.
+
+**Checked, alert:** on a simulated day with a planted problem (2026-10-13, 3 flags), the alert fired and the email arrived, and it re-fired on each daily run from November 9 to 12 because the simulated data had no later day. It is now paused.
+
+**Still to do:** a run of the feed from its schedule.
 
 **Known limits**
 - The first table's thresholds were set knowing the answers. The independent test is small: four incidents, in the same simulator.

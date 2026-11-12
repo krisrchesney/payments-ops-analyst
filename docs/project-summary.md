@@ -31,6 +31,7 @@ This file lists only what is built and checked. Each line points to its evidence
 | **Hourly feed job:** a bundle job writes the next simulated hour of authorizations (2,976 rows) into the landing volume, then refreshes the pipeline. One run by hand: both tasks succeeded, bronze grew by exactly 2,976 rows (2,000,017 to 2,002,993), and the 21 flags were identical afterwards. The run took about 13 minutes. A second run on November 4 wrote the other 335 hours of the test period (999,936 rows in all) in about 9.5 minutes. Planted incidents come from a plan file; 24 automated tests in all | `generator/feed_hour.py`, `resources/payments_ops.feed.yml`, `tests/test_feed.py`, Jira PAYOPS-55 |
 | **Detection test plan, written before the data:** 4 new incidents on new targets, predictions and scoring fixed in advance, including one incident expected to be missed | `docs/detection-test.md`, `docs/detection-test-incidents.json` |
 | **Independent detection test, scored November 8:** thresholds unchanged. Latency spike (A) caught in all 3 hours; Airlines ecommerce code 59 (C) caught; Vance Credit Union code 91 (B) missed with 22.5 extra declines against a minimum of 25; Restaurants code 59 (D) missed as planned. No false alarms in 10,080 series-days. The plan's prediction for B (about 37 extra) was wrong. The scoring script was written after the data existed and committed before its author read the flags | `docs/detection.md`, `evals/detection_test.py`, `tests/test_detection_test.py` |
+| **Alert and dashboard (PAYOPS-57, done November 12):** a daily SQL alert and an AI/BI dashboard, both defined in the bundle. The alert fired on the simulated day 2026-10-13, which has 3 flags including the planted Electronics ecommerce code 59 problem (652 declines against a baseline of 6.5), and the email arrived. It re-fired on each daily run from November 9 to 12 because the simulated data has no later day, and was then paused. The dashboard is published and shows the latest complete day (93.11% approval, 4.92K declines) | `resources/payments_ops.alert.yml`, `resources/payments_ops.dashboard.yml`, `dashboards/build_dashboard.py`, Jira PAYOPS-57 |
 | **Product ownership:** PRD, epics, user stories with acceptance criteria, short sprints in Jira with planning, review and retro; every story closed with an evidence comment. Release notes and a one-page product brief, with pricing labeled as an untested assumption | `docs/product/PRD.md`, `docs/product/releases.md`, `docs/product/brief.md`, private Jira project PAYOPS |
 
 ## Not finished yet
@@ -39,7 +40,7 @@ This file lists only what is built and checked. Each line points to its evidence
 |---|---|
 | Demo recording | Not done yet. Moved out of Sprint 5, no date set |
 | Hourly feed on its schedule | The job has never run on its schedule, which is paused, and the cadence is undecided |
-| Alert and dashboard | Sprint 6, not started. Nothing alerts anyone today, the repo has no dashboard, and the assistant can't read the flags yet |
+| Assistant reading the flags | The assistant can't read `gold_anomalies` yet, so it doesn't explain alerts on its own |
 
 ## Skills used
 

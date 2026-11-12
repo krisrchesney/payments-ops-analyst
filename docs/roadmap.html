@@ -231,15 +231,15 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
   </ol>
 
   <h2>This sprint</h2>
-  <p class="note">Sprint 6 runs from November 2 to 9. The goal is automatic detection. The detector and its test are done. What's left is making someone aware when it flags something, because today a person still has to look.</p>
+  <p class="note">Sprint 6 was planned for November 2 to 9 and its last item finished on November 12. The goal was automatic detection: the detector, its test, and now an alert and a dashboard so a person no longer has to go looking.</p>
   <ol class="timeline now">
     <li>
-      <span class="when">Not started</span>
+      <span class="when">Done November 12</span>
       <h3>Alert and dashboard</h3>
-      <p class="what">An alert when something is flagged, and a dashboard showing approvals, decline reasons, response times and open flags.</p>
+      <p class="what">A daily alert that emails when something is flagged on the latest complete day, and a dashboard showing approvals, decline reasons, response times and open flags. Both are deployed from the project's code. On a simulated day with a planted problem, the alert fired and the email arrived, and it fired again on each daily run until the simulated data stopped getting newer. It is now paused so it stops repeating.</p>
       <dl>
-        <dt>Why</dt><dd>The project has no graphs or alerts today, so someone has to go looking for problems.</dd>
-        <dt>Value</dt><dd>The detector would flag a problem, the dashboard would show it, and the assistant would explain why it happened.</dd>
+        <dt>Why</dt><dd>Before this, someone had to go looking for problems.</dd>
+        <dt>Value</dt><dd>The detector flags a problem, the alert tells someone, and the dashboard shows it. The assistant can't read the flags yet, so it doesn't explain them automatically.</dd>
       </dl>
     </li>
   </ol>
@@ -257,7 +257,7 @@ footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line);
     </li>
   </ol>
 
-  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 8, 2026.</footer>
+  <footer>All card data is simulated, and the documents describe a fictional payment processor. Updated November 12, 2026.</footer>
 </main>
 <script data-goatcounter="https://krisrchesney.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>

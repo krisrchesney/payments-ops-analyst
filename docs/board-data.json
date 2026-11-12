@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-08",
+  "updated": "2026-11-12",
   "timeline": {
     "start": "2026-10-27",
     "end": "2026-11-09"
@@ -277,7 +277,7 @@
       "key": "PAYOPS-57",
       "type": "Story",
       "title": "As an ops manager, I get an alert when an anomaly appears and can see the ops view on a dashboard.",
-      "status": "To Do",
+      "status": "Done",
       "epic": "Live monitoring",
       "sprint": "S6"
     }
