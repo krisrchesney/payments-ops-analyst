@@ -4,6 +4,8 @@ A Spark pipeline on Databricks that turns synthetic card authorizations into ope
 
 **Personal portfolio project. All data and documents in this repo are synthetic.** The data comes from `generator/generate_auths.py`, and the documents describe a fictional payment processor. No real card, merchant, issuer or cardholder data is used, and this is not employer or production work.
 
+**Why this exists, in plain language:** [WHY.md](WHY.md)
+
 **Follow the work:** [Project page](https://krisrchesney.github.io/payments-ops-analyst/) | [Scope and timeline](https://krisrchesney.github.io/payments-ops-analyst/roadmap.html) | [Project board](https://krisrchesney.github.io/payments-ops-analyst/board.html) | [Evaluation results](docs/eval.md)
 
 ## What it does
